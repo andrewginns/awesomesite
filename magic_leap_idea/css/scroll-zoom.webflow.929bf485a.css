@@ -1,37 +1,108 @@
-/* ==========================================================================
-   Start of custom Webflow CSS
-   ========================================================================== */
-.hero {
-  position: relative;
-  height: 4000px;
-}
 
-.space {
-  position: fixed;
-  width: 100%;
-  height: 100vh;
-  background-image: url("http://uploads.webflow.com/5a54ebc9e519160001e4a1e0/5a54fbf4cf06360001080a27_jeremy-thomas-99326.jpg");
-  background-position: 50% 50%;
-  background-size: cover;
-  background-repeat: no-repeat;
+ body{
+    margin:0;
 }
-
-.desk {
-  position: fixed;
-  z-index: 1;
-  width: 100%;
-  height: 100vh;
-  background-image: url("http://uploads.webflow.com/5a54ebc9e519160001e4a1e0/5a54fbed76f7000001ccaa5e_kari-shea-272383.png");
-  background-position: 50% 50%;
-  background-size: cover;
-  background-repeat: no-repeat;
+ h1{
+    font-size:2em;
+    margin:.67em 0;
 }
-
-.section {
-  position: relative;
-  z-index: 1;
-  margin-top: 1000px;
-  padding: 150px 20px;
-  background-color: #0098ff;
-  color: #fff;
+ *{
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
+}
+ body{
+    margin:0;
+    min-height:100%;
+    background-color:#fff;
+    font-family:Arial,sans-serif;
+    font-size:14px;
+    line-height:20px;
+    color:#333;
+}
+ html.w-mod-touch *{
+    background-attachment:scroll!important;
+}
+ h1,h2,h4{
+    font-weight:bold;
+    margin-bottom:10px;
+}
+ h1{
+    font-size:38px;
+    line-height:44px;
+    margin-top:20px;
+}
+ h2{
+    font-size:32px;
+    line-height:36px;
+    margin-top:20px;
+}
+ h4{
+    font-size:18px;
+    line-height:24px;
+    margin-top:10px;
+}
+ p{
+    margin-top:0;
+    margin-bottom:10px;
+}
+ .w-container{
+    margin-left:auto;
+    margin-right:auto;
+    max-width:940px;
+}
+ .w-container:before,.w-container:after{
+    content:" ";
+    display:table;
+}
+ .w-container:after{
+    clear:both;
+}
+ @media screen and (max-width:991px){
+     .w-container{
+        max-width:728px;
+    }
+}
+ @media screen and (max-width:479px){
+     .w-container{
+        max-width:none;
+    }
+}
+ .w-richtext:before,.w-richtext:after{
+    content:" ";
+    display:table;
+}
+ .w-richtext:after{
+    clear:both;
+}
+ .hero{
+    position:relative;
+    height:4000px;
+}
+ .space{
+    position:fixed;
+    width:100%;
+    height:100vh;
+    background-image:url(http://uploads.webflow.com/5a54ebc9e519160001e4a1e0/5a54fbf4cf06360001080a27_jeremy-thomas-99326.jpg);
+    background-position:50% 50%;
+    background-size:cover;
+    background-repeat:no-repeat;
+}
+ .desk{
+    position:fixed;
+    z-index:1;
+    width:100%;
+    height:100vh;
+    background-image:url(http://uploads.webflow.com/5a54ebc9e519160001e4a1e0/5a54fbed76f7000001ccaa5e_kari-shea-272383.png);
+    background-position:50% 50%;
+    background-size:cover;
+    background-repeat:no-repeat;
+}
+ .section{
+    position:relative;
+    z-index:1;
+    margin-top:1000px;
+    padding:150px 20px;
+    background-color:#0098ff;
+    color:#fff;
 }
