@@ -1,0 +1,3 @@
+section { 
+    display: block;/*same as div, but created for html 4 compatibility*/
+}
