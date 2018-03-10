@@ -1,0 +1,189 @@
+    body {
+        font-family: 'Proxima Nova', 'proxima-nova-1', 'proxima-nova-2', 'Helvetica Neue', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    section.zoom_sec {
+      width: 900px;
+      height: 540px;
+      margin-bottom: 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      display: block;
+    }
+
+    #container {
+      position: relative;
+      width: 900px;
+      margin: auto auto;
+    }
+
+    h1{
+      margin: 0 0 0px;
+    }
+
+    section.zoom_sec header {
+      padding: 0 0 0px;
+    }
+
+/* nav */
+
+/*
+    #nav {
+        padding: 0;
+        margin: 0 auto 10px;
+        overflow: auto;
+        width: 880px;
+        position: relative;
+        z-index: 100;
+    }
+
+    #nav li {
+        list-style: none;
+        float: left;
+        font-weight: bold;
+    }
+
+    #nav li a {
+        text-decoration: none;
+        display: block;
+        background: #EEF;
+        background: hsla( 0, 0%, 90%, 0.85);
+        color: blue;
+        padding: 8px 15px;
+    }
+
+    #nav li a:hover {
+        background: red;
+        color: white;
+    }
+*/
+
+
+/* Section-specific layout */
+
+    #last {
+        position: absolute;
+        /* Positions the top-left corner of the image to be *
+        /* in the middle of the box */
+        top: 50%;
+        left: 50%;
+
+        /* Play with these numbers to see what it does */
+        height: 200px;
+        width: 200px;
+        margin-top: -100px;
+        margin-left: -100px;
+        opacity: 0.2;
+
+    }
+
+    #last h1 {
+        font-size: 160px;
+        line-height: 180px;
+    }
+
+    #last {
+        color: hsl( 288, 90%, 45%);
+    }
+
+    #last .img {
+        background: hsla( 288, 90%, 45%, 0.3);
+    }
+
+
+    #hero-back {
+        position:absolute;
+        top: 50%;
+        left: 50%;
+        height: 3000px;
+        width: 3000px;
+        margin-top: -1400px;
+        margin-left: -1800px;
+
+    }
+
+
+    #hero-back h1 {
+        font-size: 100px;
+        font-weight: 600;
+        line-height: 105px;
+    }
+
+
+    #hero-back .img {
+        width: 100%;
+    }
+
+    #hero-fore {
+        position:absolute;
+        top: 50%;
+        left: 50%;
+        height: 3000px;
+        width: 3000px;
+        margin-top: -1700px;
+        margin-left: -3300px;
+        opacity: 1;
+
+    }
+
+    #hero-fore .img {
+        width: 100%;
+    }
+
+
+/* step 2 */
+
+/* How much to scale each element on scroll*/
+
+    .csstransforms #content {
+        position: absolute;
+        width: 900px;
+        height: 540px;
+    }
+
+    .csstransforms section.zoom_sec {
+        position: absolute;
+    }
+
+    .csstransforms #hero-back {
+        -webkit-transform: scale(0.123456);
+        -moz-transform: scale(0.123456);
+        -o-transform: scale(0.123456);
+        transform: scale(0.3456);
+    }
+
+    .csstransforms #hero-fore {
+        -webkit-transform: scale(3.33);
+        -moz-transform: scale(3.33);
+        -o-transform: scale(3.33);
+        transform: scale(1.33);
+    }
+
+    .csstransforms #last {
+        -webkit-transform: scale(500);
+        -moz-transform: scale(500);
+        -o-transform: scale(500);
+        transform: scale(200);
+    }
+
+
+
+/* step 3 */
+
+/* set arbitrary height on proxy scroller */
+/* how much can I scroll the hero section */
+    .csstransforms #scroller {
+        height: 1000px;
+    }
+
+/* prevent content from scrolling */
+
+    .csstransforms #wrap {
+        position: fixed;
+        width: 100%;
+    }
