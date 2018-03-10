@@ -24,8 +24,9 @@ h2{
     background-color: rgb(101,142,156);
     font-size: 1.6em;
     padding: 0.3em;
-    width = 100%;
-    border-radius: 13px;
+    margin: 0.8em 0em;
+    width = 1em;
+    border-radius: 0.5;
 }/*one type in another type*/
 
 .center {
@@ -36,7 +37,7 @@ h2{
     padding: 0.3em;
 }
 
-h2 em { font-weight: bold; }/*one type in another type*/
+h2 em {font-weight: bold;}/*one type in another type*/
 
 /*h2 {
 display: block;

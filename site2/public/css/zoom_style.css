@@ -30,40 +30,6 @@
       padding: 0 0 0px;
     }
 
-/* nav */
-
-/*
-    #nav {
-        padding: 0;
-        margin: 0 auto 10px;
-        overflow: auto;
-        width: 880px;
-        position: relative;
-        z-index: 100;
-    }
-
-    #nav li {
-        list-style: none;
-        float: left;
-        font-weight: bold;
-    }
-
-    #nav li a {
-        text-decoration: none;
-        display: block;
-        background: #EEF;
-        background: hsla( 0, 0%, 90%, 0.85);
-        color: blue;
-        padding: 8px 15px;
-    }
-
-    #nav li a:hover {
-        background: red;
-        color: white;
-    }
-*/
-
-
 /* Section-specific layout */
 
     #last {
