@@ -13,14 +13,14 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: rgb(100,100,100);
+    background-color: rgb(100, 100, 100);
 }
 
 #nav-bar li {
     float: left;
 }
 
-#nav-bar li a{
+#nav-bar li a {
     display: block;
     color: rgb(247, 24, 98);
     text-align: center;
@@ -29,6 +29,15 @@
 }
 
 /* Change the link color to #111 (black) on hover */
+
 li a:hover {
-    background-color: rgb(50,50,50);
+    background-color: rgb(50, 50, 50);
 }
+
+/*768px or smaller*/
+
+@media screen and (max-width: 768px) {
+    .nav a:not(:last-child) {
+        display: none;
+    }
+    )

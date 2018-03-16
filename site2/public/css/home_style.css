@@ -1,8 +1,10 @@
-body { font-family: 'Roboto Condensed','PT Mono', monospace, Arial,Helvetica,FreeSans,sans-serif; }
+body {
+    font-family: 'Roboto Condensed', 'PT Mono', monospace, Arial, Helvetica, FreeSans, sans-serif;
+}
 
-body { 
+body {
     min-width: 640px;
-    padding-top: 50px; 
+    padding-top: 50px;
     background-color: rgb(242, 242, 242);
 }
 
@@ -11,23 +13,29 @@ color: blue;
 }*/
 
 section.section_summary {
-    color:rgb(202,207,133);
-}/*use these sort of comment braces*/
+    color: rgb(202, 207, 133);
+}
+
+/*use these sort of comment braces*/
 
 section.home_panel {
     position: relative;
     z-index: 9999;
-    background-color: rgb(100,100,100);
-}/*use these sort of comment braces*/
+    background-color: rgb(100, 100, 100);
+}
 
-h2{
-    background-color: rgb(101,142,156);
+/*use these sort of comment braces*/
+
+h2 {
+    background-color: rgb(101, 142, 156);
     font-size: 1.6em;
     padding: 0.3em;
     margin: 0.8em 0em;
-    width = 1em;
+    width=1em;
     border-radius: 0.5;
-}/*one type in another type*/
+}
+
+/*one type in another type*/
 
 .center {
     text-align: center;
@@ -37,7 +45,11 @@ h2{
     padding: 0.3em;
 }
 
-h2 em {font-weight: bold;}/*one type in another type*/
+h2 em {
+    font-weight: bold;
+}
+
+/*one type in another type*/
 
 /*h2 {
 display: block;
@@ -46,3 +58,14 @@ font-weight: bold;
 margin: 0.83em 0;
 }*/
 
+/*768px or smaller*/
+@media screen and (max-width: 768px) {
+    body {
+        background-color: green;
+    }
+    
+@media screen and (max-width: 992px) {
+    body {
+        background-color: blue;
+    }
+    
