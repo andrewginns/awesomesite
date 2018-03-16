@@ -68,8 +68,8 @@
         left: 50%;
         height: 3000px;
         width: 3000px;
-        margin-top: -1400px;
-        margin-left: -1800px;
+        margin-top: -2600px;
+        margin-left: -4500px;
 
     }
 
@@ -92,7 +92,7 @@
         height: 3000px;
         width: 3000px;
         margin-top: -1700px;
-        margin-left: -3300px;
+        margin-left: -9700px;
         opacity: 1;
 
     }
@@ -120,14 +120,14 @@
         -webkit-transform: scale(0.123456);
         -moz-transform: scale(0.123456);
         -o-transform: scale(0.123456);
-        transform: scale(0.3456);
+        transform: scale(2.3);
     }
 
     .csstransforms #hero-fore {
         -webkit-transform: scale(3.33);
         -moz-transform: scale(3.33);
         -o-transform: scale(3.33);
-        transform: scale(1.33);
+        transform: scale(6);
     }
 
     .csstransforms #last {
