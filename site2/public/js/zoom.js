@@ -1,19 +1,24 @@
 "use strict";
-addEventListener('load', zoom_start);
+addEventListener('DOMContentLoaded', zoom_start);
 
 function zoom_start(){
-    window.unload = function () { window.scrollTo(0,0);}
-    //console.log("in zoom_start");
+    
+    window.onbeforeunload = backToTop;
+    window.unload = backToTop;
+    
     // only proceed if CSS transforms are supported
     if (!Modernizr.csstransforms) {
         return;
     }
 
     init();
-
+    
+    function backToTop() {
+        window.scrollTo(0, 0);
+    }
+    
     //helper functions
     function init() {
-        console.log("init");
         var content = document.getElementById('content'),
             // init Zoomer constructor
             ZUI = new Zoomer(content);

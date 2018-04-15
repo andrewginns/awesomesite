@@ -4,13 +4,18 @@ body {
 
 body {
     min-width: 640px;
-    padding-top: 50px;
     background-color: rgb(242, 242, 242);
 }
 
 /*#contact {
 color: blue;
 }*/
+
+article {
+    padding: 2em;
+    border-width: 1em;
+    border-color: blue;
+}
 
 section.section_summary {
     color: rgb(202, 207, 133);
@@ -20,16 +25,19 @@ section.section_summary {
 
 section.home_panel {
     position: relative;
-    z-index: 9999;
+    z-index: 9998;
     background-color: rgb(100, 100, 100);
 }
 
 /*use these sort of comment braces*/
+h1 {
+    font-size: 2.5em;
+}
 
 h2 {
     background-color: rgb(101, 142, 156);
     font-size: 1.6em;
-    padding: 0.3em;
+    padding: 0.5em;
     margin: 0.8em 0em;
     width=1em;
     border-radius: 0.5;
