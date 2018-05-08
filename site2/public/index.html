@@ -3,24 +3,24 @@
 
     <head>
         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Personal Website</title>
         <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet" />
         <link href="./css/polyfills.css" rel="stylesheet" type="text/css" />
         <link href="./css/nav_style.css" rel="stylesheet" type="text/css" />
-        <link href="./css/zoom_style.css" rel="stylesheet" type="text/css" />
+        <link href="./css/hero_style.css" rel="stylesheet" type="text/css" />
         <link href="./css/home_style.css" rel="stylesheet" type="text/css" />
         <script src="./js/polyfills.js"></script>
-        <script src="./js/zoom.js"></script>
         <script src="./js/test.js"></script>
-
+        <script src="./js/hero.js"></script>
     </head>
 
     <body>
         <div id ="nav-wrapper">
             <nav id="nav-bar">
                 <ul>
-                    <li><a id = "home" class="nav-elem">Home</a></li>
+                    <li><a id ="home" class="nav-elem">Home</a></li>
                     <li><a id ="blog" class="nav-elem">Blog</a></li>
                     <li><a id ="projects" class="nav-elem">Projects</a></li>
                     <li><a id ="about" class="nav-elem">About</a></li>
@@ -29,65 +29,31 @@
             </nav>
         </div>
 
-        <div id="wrap">
-            <div id="container">
-
-                <!--
-<ul id="nav">
-<li><a href="Cool">Static</a></li>
-<li><a href="link">Bar</a></li>
-<li><a href="bro">Much</a></li>
-<li><a href="hello">Wow.</a></li>
-<li><a href="world">wow.</a></li>
-</ul>
--->
-                <div id="content">
-                    <section class="zoom_sec" id="hero-back">
-                        <header>
-                            <img src="./images/back.jpg" />
-                        </header>
-                    </section>
-
-                    <section class="zoom_sec" id="hero-fore">
-                        <header>
-                            <img src="./images/fore.png" />
-                        </header>
-                    </section>
-
-                    <section class="zoom_sec" id="last">
-                        <header>
-                            <h1>The last layer</h1>
-                        </header>
-                    </section>
-
-                </div>
-                <!-- #content -->
-
-            </div>
-            <!-- #container -->
-        </div>
-        <!-- #wrap -->
-
-        <div id="scroller"></div>
+        <section id = "hero_section" class="hero_panel">
+            <header id = "hero_overlay">
+                <h1>AESTHETIC</h1>
+                <img src='images/arrow.svg' alt="Scroll down arrow" />
+            </header>
+        </section>
 
         <section id = "home_section" class="home_panel">
             <h1 class="center">AWESOMESITE</h1>
-            
+
             <section id="assessment_section" class="section_summary">
                 <h2 class="center">Assesment</h2>
                 <ul>
-                  <li>C for HTML</li>
-                  <li>B for CSS</li>
-                  <li>C for JS</li>
-                  <li>C for PNG</li>
-                  <li>X for SVG</li>
-                  <li>X for Server</li>
-                  <li>X for Database</li>
-                  <li>X for Dynamic pages</li>
-                  <li>15 for Depth (out of 40)</li>
+                    <li>C for HTML</li>
+                    <li>B for CSS</li>
+                    <li>C for JS</li>
+                    <li>C for PNG</li>
+                    <li>X for SVG</li>
+                    <li>X for Server</li>
+                    <li>X for Database</li>
+                    <li>X for Dynamic pages</li>
+                    <li>15 for Depth (out of 40)</li>
                 </ul>     
             </section>
-                     
+
 
             <section id="blog_section" class="section_summary">
                 <h2 class="center">Blog</h2>

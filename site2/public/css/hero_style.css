@@ -1,0 +1,30 @@
+section.hero_panel {
+    height: 70em;
+    position: relative;
+    background-image: url(https://unsplash.it/4288/2848?image=717);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+section.hero_panel h1 {
+    position: absolute;
+    font-size: 5em;
+    margin: auto;
+    padding-top: 28%;
+    top: 0;
+    left: 0;
+    right: 0;
+    font-weight: lighter;
+    color: white;
+    letter-spacing: 0.2em;
+    text-align: center;
+}
+
+section.hero_panel img {
+    width: 10%;
+    display: block;
+    padding-left: 45%;
+    padding-top: 45%
+}
