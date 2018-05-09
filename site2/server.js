@@ -24,7 +24,6 @@ var http = require("http");
 var https = require("https");
 var fs = require("fs");
 var qs = require("querystring");
-var express = require('express');
 
 
 var OK = 200, BadRequest = 400, NotFound = 404, BadType = 415, Error = 500;

@@ -22,7 +22,7 @@ article {
 }
 
 section.section_summary {
-    color: rgb(202, 207, 133);
+    color: rgb(247, 24, 98);
 }
 
 /*use these sort of comment braces*/
@@ -32,7 +32,7 @@ section.home_panel {
     margin: auto;
     position: relative;
     z-index: 9998;
-    background-color: rgb(100, 100, 100);
+    background-color: rgb(256, 256, 256);
 }
 
 /*use these sort of comment braces*/

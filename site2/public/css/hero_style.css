@@ -1,5 +1,6 @@
 section.hero_panel {
-    height: 70em;
+    height: 100vh;
+    margin: 0;
     position: relative;
     background-image: url(https://unsplash.it/4288/2848?image=717);
     background-attachment: fixed;
@@ -11,20 +12,20 @@ section.hero_panel {
 section.hero_panel h1 {
     position: absolute;
     font-size: 5em;
-    margin: auto;
-    padding-top: 28%;
-    top: 0;
-    left: 0;
-    right: 0;
     font-weight: lighter;
     color: white;
     letter-spacing: 0.2em;
     text-align: center;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 section.hero_panel img {
-    width: 5%;
-    display: block;
-    padding-left: 45%;
-    padding-top: 45%
+    position: absolute;
+    width: 2%;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
 }
