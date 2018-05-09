@@ -20,22 +20,34 @@ var verbose = true;
 // Load the library modules, and define the global constants.
 // See http://en.wikipedia.org/wiki/List_of_HTTP_status_codes.
 // Start the server:
-
 var http = require("http");
+var https = require("https");
 var fs = require("fs");
-var OK = 200, NotFound = 404, BadType = 415, Error = 500;
+var qs = require("querystring");
+var express = require('express');
+
+
+var OK = 200, BadRequest = 400, NotFound = 404, BadType = 415, Error = 500;
 var types, banned;
 start();
 
 // Start the http service. Accept only requests from localhost, for security.
 function start() {
-    if (! checkSite()) return;
+    if (!checkSite()) return;
     types = defineTypes();
     banned = [];
     banUpperCase("./public/", "");
-    var service = http.createServer(handle);
-    service.listen(port, "localhost");
-    var address = "http://localhost";
+
+    //var app = express();
+
+    //used to add an SSL certificate to the website
+    var privateKey =  fs.readFileSync('./ssl/key.pem');
+    var certificate = fs.readFileSync('./ssl/cert.pem');
+    var credentials = {key: privateKey, cert: certificate};
+
+    var service = https.createServer(credentials, handle);
+    service.listen(port, "localhost");//this makes the server listen on localhost, good practice for development/security
+    var address = "https://localhost";
     if (port != 80) address = address + ":" + port;
     console.log("Server running at", address);
 }
@@ -46,20 +58,49 @@ function checkSite() {
     var ok = fs.existsSync(path);
     if (ok) path = "./public/index.html";
     if (ok) ok = fs.existsSync(path);
-    if (! ok) console.log("Can't find", path);
+    if (!ok) console.log("Can't find", path);
     return ok;
+}
+
+//Used to log the most important request information
+function logRequestInfo(request){
+    console.log("Method:", request.method);
+    console.log("URL:", request.url);
+    console.log("Headers:", request.headers);
+}
+
+//Used to validate urls. returns true if url is invalid, otherwise false
+function invalidURL(url){
+    var ascii = /^[ -~]+$/;
+    return !ascii.test(url) ||
+        !url.startsWith("/") || 
+        url.includes("..") ||
+        url.includes("/.") ||
+        url.includes("//");
 }
 
 // Serve a request by delivering a file.
 function handle(request, response) {
-    var url = request.url.toLowerCase();
+    //if (verbose) logRequestInfo(request);
+    //to make system directories style standard
+    var url = request.url.toLowerCase().replace(/\\/g, "/");
+    //for debugging
+    console.log(""+url);
     if (url.endsWith("/")) url = url + "index.html";
+    if (invalidURL(url)) return fail(response, BadRequest, "Permission denied");   
     if (isBanned(url)) return fail(response, NotFound, "URL has been banned");
-    var type = findType(url);
-    if (type == null) return fail(response, BadType, "File type unsupported");
-    var file = "./public" + url;
-    fs.readFile(file, ready);
-    function ready(err, content) { deliver(response, type, err, content); }
+    console.log(request.method);
+    
+    if(request.method.toString().toLowerCase() === "post") {
+        handlePostRequest(request, response);
+    } else {
+        var type = findType(request, url);
+        if (type == null) return fail(response, BadType, "File type unsupported");
+        var file = "./public" + url;
+        fs.readFile(file, ready);
+        function ready(err, content) { deliver(response, type, err, content); }   
+    }
+    
 }
 
 // Forbid any resources which shouldn't be delivered to the browser.
@@ -72,10 +113,28 @@ function isBanned(url) {
 }
 
 // Find the content type to respond with, or undefined.
-function findType(url) {
+function findType(request, url) {
     var dot = url.lastIndexOf(".");
     var extension = url.substring(dot + 1);
-    return types[extension];
+    return htmlContentNegotiation(request, extension, types[extension]);
+}
+
+//This function is used to send the html file as standard html if xhtml is not supported
+function htmlContentNegotiation(request, extension, type) {
+    if("html" === extension) {
+        var otype = "text/html";
+        var header = request.headers.accept;
+        if (header != null){
+            var accepts = header.split(",");
+            if(accepts.indexOf(type) < 0){
+                type = otype;
+                console.log("negotiated content");
+            } 
+        }else {
+            type = otype;
+        }
+    }
+    return type;
 }
 
 // Deliver the file that has been read in to the browser.
@@ -120,7 +179,7 @@ function banUpperCase(root, folder) {
 
 // The most common standard file extensions are supported, and html is
 // delivered as "application/xhtml+xml".  Some common non-standard file
-// extensions are explicitly excluded.  This table is defined using a function
+//some extensions are explicitly excluded.  This table is defined using a function
 // rather than just a global variable, because otherwise the table would have
 // to appear before calling start().  NOTE: add entries as needed or, for a more
 // complete list, install the mime module and adapt the list it provides.
@@ -130,9 +189,9 @@ function defineTypes() {
         css  : "text/css",
         js   : "application/javascript",
         png  : "image/png",
-        gif  : "image/gif",    // for images copied unchanged
-        jpeg : "image/jpeg",   // for images copied unchanged
-        jpg  : "image/jpeg",   // for images copied unchanged
+        gif  : "image/gif",    // for images copied unchanged, not standard remove
+        jpeg : "image/jpeg",   // for images copied unchanged, not standard, remove
+        jpg  : "image/jpeg",   // for images copied unchanged, not standard remove
         svg  : "image/svg+xml",
         json : "application/json",
         pdf  : "application/pdf",
@@ -151,4 +210,34 @@ function defineTypes() {
         docx : undefined,      // non-standard, platform dependent, use .pdf
     }
     return types;
+}
+
+
+
+
+// Deal with a request.
+function handlePostRequest(request, response) {
+    var body = {text: ""};
+    request.on('data', add.bind(null, body));
+    request.on('end', end.bind(null, body, response));
+}
+
+function add(body, chunk) {
+    body.text = body.text + chunk.toString();
+}
+
+function end(body, response) {
+    console.log("Body:", body.text);
+    reply(body, response);
+}
+
+// Send a reply.
+function reply(body, response) {
+    var params = qs.parse(body.text);
+    console.log(params.email, params.subject, params.message); 
+
+    var hdrs = { 'Content-Type': 'text/plain' };
+    response.writeHead(200, hdrs);
+    response.write("done");
+    response.end();
 }

@@ -1,0 +1,246 @@
+char getABRLNFCode(vec4& vertex) {
+	float yMax = vertex.w * HALF_SCREEN_HEIGHT;
+	float yMin = -yMax;
+
+	float xMax = vertex.w * HALF_SCREEN_WIDTH;
+	float xMin = -xMax;
+
+	
+	float zFar = 1.05f;
+
+	char code = 0;
+	//if (vertex.z < zFar) {
+		//code += 32;//far
+	//} 
+	if (vertex.z < nearPlaneDist) {
+		code += 16;//near
+	}//else in view
+
+	if (vertex.y >= yMax) {
+		code += 8;//above
+	} else if (vertex.y < yMin) {
+		code += 4;//below
+	}//else in between
+
+	if (vertex.x >= xMax) {
+		code += 2;//right
+	} else if (vertex.x < xMin) {
+		code += 1;//left
+	}//else in between
+	return code;
+}
+
+bool clip3dLine(Vertex& start, Vertex& end, Vertex& clipStart, Vertex& clipEnd) {
+
+	clipStart = start;
+	clipEnd = end;
+	clipStart.position.w = clipStart.position.z / FOCAL_LENGTH;
+	clipEnd.position.w = clipEnd.position.z / FOCAL_LENGTH;
+
+	char startCode = getABRLNFCode(clipStart.position);
+	char initialStartCode = startCode;
+	char endCode = getABRLNFCode(clipEnd.position);
+
+	//trivially accept
+	if ((startCode | endCode) == 0) {
+		//both are within the screen
+		return true;
+	}
+
+	//trivially reject
+	if (startCode & endCode) {
+		return false;
+	} //else must be equal to zero
+
+	if (startCode != 0) {//startCode needs to be adjusted
+
+		if (startCode & 16) {//near
+			vec3 diff = clipStart.position - clipEnd.position;
+			if (abs(diff.z) > FLT_EPSILON) {
+				float zMag = nearPlaneDist - clipEnd.position.z;
+				float ratio = (zMag / diff.z);
+				clipStart.position.y = clipEnd.position.y + diff.y * ratio;
+				clipStart.position.x = clipEnd.position.x + diff.x * ratio;
+			}
+			clipStart.position.z = nearPlaneDist;
+			clipStart.position.w = clipStart.position.z / FOCAL_LENGTH;
+
+			startCode = getABRLNFCode(clipStart.position);
+			if ((startCode | endCode) == 0) {
+				//both are within the screen
+				return true;
+			}
+		}
+
+		if (startCode & 8) {//above
+			vec3 diff = clipStart.position - clipEnd.position;
+			float yMax = clipStart.position.w * (HALF_SCREEN_HEIGHT - 1);
+			if (abs(diff.y) > FLT_EPSILON) {
+				float yMag = yMax - clipEnd.position.y;
+				float ratio = (yMag / diff.y);
+				clipStart.position.x = clipEnd.position.x + diff.x * ratio;
+				clipStart.position.z = clipEnd.position.z + diff.z * ratio;
+				clipStart.position.w = clipStart.position.z / FOCAL_LENGTH;
+			}
+			clipStart.position.y = yMax;
+			startCode = getABRLNFCode(clipStart.position);
+			if ((startCode | endCode) == 0) {
+				//both are within the screen
+				return true;
+			}
+		} else if (startCode & 4) {//below
+			vec3 diff = clipStart.position - clipEnd.position;
+			float yMin = clipStart.position.w * -HALF_SCREEN_HEIGHT;
+			if (abs(diff.y) > FLT_EPSILON) {
+				float yMag = yMin - clipEnd.position.y;
+				float ratio = (yMag / diff.y);
+				clipStart.position.x = clipEnd.position.x + diff.x * ratio;
+				clipStart.position.z = clipEnd.position.z + diff.z * ratio;
+				clipStart.position.w = clipStart.position.z / FOCAL_LENGTH;
+			}
+			clipStart.position.y = yMin;
+			startCode = getABRLNFCode(clipStart.position);
+			if ((startCode | endCode) == 0) {
+				//both are within the screen
+				return true;
+			}
+		}
+
+
+		if (startCode & 2) {//right
+			vec3 diff = clipStart.position - clipEnd.position;
+			float xMax = clipStart.position.w * (HALF_SCREEN_WIDTH - 1);
+			if (abs(diff.x) > FLT_EPSILON) {
+				float xMag = xMax - clipEnd.position.x;
+				float ratio = (xMag / diff.x);
+				clipStart.position.y = clipEnd.position.y + diff.y * ratio;
+				clipStart.position.z = clipEnd.position.z + diff.z * ratio;
+				clipStart.position.w = clipStart.position.z / FOCAL_LENGTH;
+			}
+			clipStart.position.x = xMax;
+			startCode = getABRLNFCode(clipStart.position);
+			if ((startCode | endCode) == 0) {
+				//both are within the screen
+				return true;
+			}
+		} else if (startCode & 1) {//below
+			vec3 diff = clipStart.position - clipEnd.position;
+			float xMin = clipStart.position.w * -HALF_SCREEN_WIDTH;
+			if (abs(diff.x) > FLT_EPSILON) {
+				float xMag = xMin - clipEnd.position.x;
+				float ratio = (xMag / diff.x);
+				clipStart.position.y = clipEnd.position.y + diff.y * ratio;
+				clipStart.position.z = clipEnd.position.z + diff.z * ratio;
+				clipStart.position.w = clipStart.position.z / FOCAL_LENGTH;
+			}
+			clipStart.position.x = xMin;
+			startCode = getABRLNFCode(clipStart.position);
+			if ((startCode | endCode) == 0) {
+				//both are within the screen
+				return true;
+			}
+		}
+
+	}
+
+	//at this point startCode should be equal to zero
+	if (startCode != 0) {
+		cout << "error in clipping startcode - clipStart.x = " << clipStart.position.x << "clipStart.y = " << clipStart.position.y << " clipStart.z = " << clipStart.position.z<<  endl;
+	}
+
+	if (endCode & 16) {//near
+		vec3 diff = clipStart.position - clipEnd.position;
+		if (abs(diff.z) > FLT_EPSILON) {
+			float zMag = nearPlaneDist - clipEnd.position.z;
+			float ratio = (zMag / diff.z);
+			clipEnd.position.y = clipEnd.position.y + diff.y * ratio;
+			clipEnd.position.x = clipEnd.position.x + diff.x * ratio;
+		}
+		clipEnd.position.z = nearPlaneDist;
+		clipEnd.position.w = clipEnd.position.z / FOCAL_LENGTH;
+
+		endCode = getABRLNFCode(clipEnd.position);
+		if ((startCode | endCode) == 0) {
+			//both are within the screen
+			return true;
+		}
+	}
+
+	if (endCode & 8) {//above
+		vec3 diff = clipStart.position - clipEnd.position;
+		float yMax = clipEnd.position.w * (HALF_SCREEN_HEIGHT - 1);
+		if (abs(diff.y) > FLT_EPSILON) {
+			float yMag = yMax - clipEnd.position.y;
+			float ratio = (yMag / diff.y);
+			clipEnd.position.x = clipEnd.position.x + diff.x * ratio;
+			clipEnd.position.z = clipEnd.position.z + diff.z * ratio;
+			clipEnd.position.w = clipEnd.position.z / FOCAL_LENGTH;
+		}
+		clipEnd.position.y = yMax;
+		endCode = getABRLNFCode(clipEnd.position);
+		if ((startCode | endCode) == 0) {
+			//both are within the screen
+			return true;
+		}
+	} else if (endCode & 4) {//below
+		vec3 diff = clipStart.position - clipEnd.position;
+		float yMin = clipEnd.position.w * -HALF_SCREEN_HEIGHT;
+		if (abs(diff.y) > FLT_EPSILON) {
+			float yMag = yMin - clipEnd.position.y;
+			float ratio = (yMag / diff.y);
+			clipEnd.position.x = clipEnd.position.x + diff.x * ratio;
+			clipEnd.position.z = clipEnd.position.z + diff.z * ratio;
+			clipEnd.position.w = clipEnd.position.z / FOCAL_LENGTH;
+		}
+		clipEnd.position.y = yMin;
+		endCode = getABRLNFCode(clipEnd.position);
+		if ((startCode | endCode) == 0) {
+			//both are within the screen
+			return true;
+		}
+	}
+
+
+	if (endCode & 2) {//right
+		vec3 diff = clipStart.position - clipEnd.position;
+		float xMax = clipEnd.position.w * (HALF_SCREEN_WIDTH - 1);
+		if (abs(diff.x) > FLT_EPSILON) {
+			float xMag = xMax - clipEnd.position.x;
+			float ratio = (xMag / diff.x);
+			clipEnd.position.y = clipEnd.position.y + diff.y * ratio;
+			clipEnd.position.z = clipEnd.position.z + diff.z * ratio;
+			clipEnd.position.w = clipEnd.position.z / FOCAL_LENGTH;
+		}
+		clipEnd.position.x = xMax;
+		endCode = getABRLNFCode(clipEnd.position);
+		if ((startCode | endCode) == 0) {
+			//both are within the screen
+			return true;
+		}
+	} else if (endCode & 1) {//below
+		vec3 diff = clipStart.position - clipEnd.position;
+		float xMin = clipEnd.position.w * -HALF_SCREEN_WIDTH;
+		if (abs(diff.x) > FLT_EPSILON) {
+			float xMag = xMin - clipEnd.position.x;
+			float ratio = (xMag / diff.x);
+			clipEnd.position.y = clipEnd.position.y + diff.y * ratio;
+			clipEnd.position.z = clipEnd.position.z + diff.z * ratio;
+			clipEnd.position.w = clipEnd.position.z / FOCAL_LENGTH;
+		}
+		clipEnd.position.x = xMin;
+		endCode = getABRLNFCode(clipEnd.position);
+		if ((startCode | endCode) == 0) {
+			//both are within the screen
+			return true;
+		}
+	}
+
+
+	//this point should never hit
+	if (endCode != 0) {
+		cout << "error in clipping endcode - clipStart.x = " << clipEnd.position.x << "clipStart.y = " << clipEnd.position.y << " clipStart.z = " << clipEnd.position.z << endl;
+	}
+	return false;
+
+
+}
