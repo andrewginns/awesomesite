@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!--        <meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
         <title>Personal Website</title>
         <link runat="server" rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
         <link runat="server" rel="icon" href="favicon.ico" type="image/ico"/>
@@ -13,28 +13,48 @@
         <link href="./css/nav_style.css" rel="stylesheet" type="text/css" />
         <link href="./css/hero_style.css" rel="stylesheet" type="text/css" />
         <link href="./css/home_style.css" rel="stylesheet" type="text/css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!--        <script src="./js/svg.js"></script>-->
         <script src="./js/polyfills.js"></script>
         <script src="./js/test.js"></script>
+        <script type="text/javascript" src="./js/instafeed.min.js"></script>
+        <script type="text/javascript">
+            var feed = new Instafeed({
+                get: 'tagged',
+                tagName: 'awesome',
+                clientId: '23ef45cf2fac443db9f3e6fdc6e0fe89',
+                accessToken: 'e1728a73d05440689d70be3f7e382161',
+                resolution: 'standard_resolution',
+                template: '<a href="{{link}}" target="_blank" id="{{id}}"><img src="{{image}}" /><span>{{likes}}{{comments}}</span></a>',
+                sortBy: 'most-recent',
+                limit: 32,
+                links: false
+            });
+            userFeed.run();
+        </script>
     </head>
 
-    <body>
-        <div id ="nav-wrapper">
-            <nav id="nav-bar">
-                <ul>
-                    <li><a id ="home" class="nav-elem">Home</a></li>
-                    <li><a id ="blog" class="nav-elem">Blog</a></li>
-                    <li><a id ="projects" class="nav-elem">Projects</a></li>
-                    <li><a id ="about" class="nav-elem">About</a></li>
-                    <li><a id ="contact" class="nav-elem">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
+    <header id = "navigation">
+        <nav id="nav-bar">
+            <ul>
+                <li><a id ="home" class="nav-elem">Home</a></li>
+                <li><a id ="blog" class="nav-elem">Blog</a></li>
+                <li><a id ="projects" class="nav-elem">Projects</a></li>
+                <li><a id ="about" class="nav-elem">About</a></li>
+                <li><a id ="contact" class="nav-elem">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
+    <body>
         <section id = "hero_section" class="hero_panel">
-            <header id = "hero_overlay">
-                <h1>AESTHETIC</h1>
-                <img src='images/arrow.svg' alt="Scroll down arrow" />
-            </header>
+            <h1>AESTHETIC</h1>
+            <img id ="arrow" class="svg button pulse" src='images/arrow.svg' alt="Scroll down arrow" />
+            <!--
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128" viewBox="0 0 32 32">
+<path class="svg button pulse" d="M2000,1434l887-891,243,231L1999,1833,867,770l246-227Z"></path>
+</svg>
+-->
         </section>
 
         <section id = "home_section" class="home_panel">
@@ -71,6 +91,7 @@
 
             <section id="projects_section" class="section_summary">
                 <h2 class="center">Projects</h2>
+                <div id="instafeed"></div>
                 <article>
                     <h3>project 1</h3>
                     <p>Description</p>
