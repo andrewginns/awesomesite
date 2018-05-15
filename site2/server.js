@@ -24,6 +24,7 @@ var http = require("http");
 var https = require("https");
 var fs = require("fs");
 var qs = require("querystring");
+var express = require('express');
 
 
 var OK = 200, BadRequest = 400, NotFound = 404, BadType = 415, Error = 500;
@@ -92,15 +93,44 @@ function handle(request, response) {
     
     if(request.method.toString().toLowerCase() === "post") {
         handlePostRequest(request, response);
-    } else {
-        var type = findType(request, url);
-        if (type == null) return fail(response, BadType, "File type unsupported");
-        var file = "./public" + url;
-        fs.readFile(file, ready);
-        function ready(err, content) { deliver(response, type, err, content); }   
-    }
-    
+    } else if (request.method.toString().toLowerCase() === "get"){
+        handleGetRequest(url, request, response);
+    } 
 }
+
+function handleGetRequest(url, request, response) {
+    var type = findType(request, url);
+    if (type == null) return fail(response, BadType, "File type unsupported");
+    var file = "./public" + url;
+    fs.readFile(file, ready);
+    console.log(ready);
+    function ready(err, content) { deliver(response, type, err, content); } 
+}
+
+// Deal with a request.
+function handlePostRequest(request, response) {
+    var body = {text: ""};
+    request.on('data', add.bind(null, body));
+    request.on('end', end.bind(null, body, request, response));
+}
+
+function add(body, chunk) {
+    body.text = body.text + chunk.toString();
+}
+
+function end(body, request, response) {
+    console.log("Body:", body.text);
+    reply(body, request, response);
+}
+
+// Send a reply.
+function reply(body, request, response) {
+    var params = qs.parse(body.text);
+    console.log(params.email, params.subject, params.message); 
+    var url = "/index.html";
+    handleGetRequest(url, request, response);
+}
+
 
 // Forbid any resources which shouldn't be delivered to the browser.
 function isBanned(url) {
@@ -123,7 +153,8 @@ function htmlContentNegotiation(request, extension, type) {
     if("html" === extension) {
         var otype = "text/html";
         var header = request.headers.accept;
-        if (header != null){
+        var header = null;
+        if (header != null) {
             var accepts = header.split(",");
             if(accepts.indexOf(type) < 0){
                 type = otype;
@@ -209,34 +240,4 @@ function defineTypes() {
         docx : undefined,      // non-standard, platform dependent, use .pdf
     }
     return types;
-}
-
-
-
-
-// Deal with a request.
-function handlePostRequest(request, response) {
-    var body = {text: ""};
-    request.on('data', add.bind(null, body));
-    request.on('end', end.bind(null, body, response));
-}
-
-function add(body, chunk) {
-    body.text = body.text + chunk.toString();
-}
-
-function end(body, response) {
-    console.log("Body:", body.text);
-    reply(body, response);
-}
-
-// Send a reply.
-function reply(body, response) {
-    var params = qs.parse(body.text);
-    console.log(params.email, params.subject, params.message); 
-
-    var hdrs = { 'Content-Type': 'text/plain' };
-    response.writeHead(200, hdrs);
-    response.write("done");
-    response.end();
 }
