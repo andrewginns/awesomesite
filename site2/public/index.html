@@ -13,25 +13,15 @@
         <link href="./css/nav_style.css" rel="stylesheet" type="text/css" />
         <link href="./css/hero_style.css" rel="stylesheet" type="text/css" />
         <link href="./css/home_style.css" rel="stylesheet" type="text/css" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link href="./css/insta.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="./css/magnific.css">
         <!--        <script src="./js/svg.js"></script>-->
         <script src="./js/polyfills.js"></script>
         <script src="./js/test.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript" src="./js/instafeed.min.js"></script>
-        <script type="text/javascript">
-            var feed = new Instafeed({
-                get: 'tagged',
-                tagName: 'awesome',
-                clientId: '23ef45cf2fac443db9f3e6fdc6e0fe89',
-                accessToken: 'e1728a73d05440689d70be3f7e382161',
-                resolution: 'standard_resolution',
-                template: '<a href="{{link}}" target="_blank" id="{{id}}"><img src="{{image}}" /><span>{{likes}}{{comments}}</span></a>',
-                sortBy: 'most-recent',
-                limit: 32,
-                links: false
-            });
-            userFeed.run();
-        </script>
+        <script type="text/javascript" src="./js/feed.js"></script>
+        <script src="./js/magnific.min.js"></script>
     </head>
 
     <header id = "navigation">
@@ -57,6 +47,11 @@
 -->
         </section>
 
+        <section id="insta_section">
+            <h2 class="center">Insta</h2>
+            <div id="instafeed" class="row gallery"></div>
+        </section>
+
         <section id = "home_section" class="home_panel">
             <h1 class="center">AWESOMESITE</h1>
 
@@ -75,7 +70,6 @@
                 </ul>     
             </section>
 
-
             <section id="blog_section" class="section_summary">
                 <h2 class="center">Blog</h2>
                 <article>
@@ -91,7 +85,6 @@
 
             <section id="projects_section" class="section_summary">
                 <h2 class="center">Projects</h2>
-                <div id="instafeed"></div>
                 <article>
                     <h3>project 1</h3>
                     <p>Description</p>

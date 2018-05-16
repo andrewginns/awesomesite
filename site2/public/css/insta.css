@@ -1,0 +1,28 @@
+#insta_section {
+    
+}
+
+#instafeed {
+  max-width: 1080px;
+  width: 100%;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+#instafeed a {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 50%;
+  background: white;
+}
+@media only screen and (min-width: 580px) {
+  #instafeed a {
+    width: 25%;
+  }
+}
+#instafeed a img {
+  display: block;
+  width: 100%;
+}
+

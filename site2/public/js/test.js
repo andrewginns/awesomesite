@@ -1,15 +1,14 @@
-"use strict";
-addEventListener('load', start);
+
 
 "use strict";
 addEventListener('load', start);
 function start() { 
     console.log("scroll to top");
-    
+
     console.log("scroll to top");
     window.onbeforeunload = backToTop;
     window.unload = backToTop;
-    
+
     //    document.getElementById("arrow").addEventListener("click", jumpTo.bind(null, "assessment_section"), false);
     //    document.getElementById("home").addEventListener("click", scrollTo.bind(null, 0,0), false);
     //    document.getElementById("blog").addEventListener("click", jumpTo.bind(null, "blog_section"), false);
@@ -22,12 +21,32 @@ function start() {
     document.getElementById("projects").addEventListener("click", smoothScroll.bind(null, "projects_section"), false);
     document.getElementById("about").addEventListener("click", smoothScroll.bind(null, "about_section"), false);
     document.getElementById("contact").addEventListener("click", smoothScroll.bind(null, "contact_section"), false);
-//    document.querySelector(".svg button pulse").getSVGDocument().getElementById("svgInternalID").setAttribute("fill", "red")
-    
-    console.log("listening for clicks")
-    document.getElementById("contact_submit").addEventListener("click", processForm);
-    console.log("listening for clicks")
+    //    document.querySelector(".svg button pulse").getSVGDocument().getElementById("svgInternalID").setAttribute("fill", "red")
+
+//    console.log("listening for clicks")
+//    document.getElementById("contact_submit").addEventListener("click", processForm);
+//    console.log("listening for clicks")
+
+//    setTimeout(pollBar, 200)
 } 
+
+//function pollBar(){
+//    var found = document.querySelector(".mfp-zoom-out-cur");
+//    console.log(found);
+//    //if the picture is present disable nav bar
+//    if (found != null) {
+//        document.getElementById("nav-bar").("display", "none");
+//        console.log("hidden true");
+//        //enable nav bar
+//    } else {
+//        document.getElementById("nav-bar").setAttribute("display", "none");
+//        console.log("hidden false");
+//    }
+//    setTimeout(pollBar, 200);
+
+
+
+//}
 
 //function jumpTo(element, event) {
 //    console.log(element);
@@ -89,7 +108,7 @@ function processForm(e) {
     var email_t = document.getElementById("contact_e_mail");
     var subject_t = document.getElementById("contact_subject");
     var message_t = document.getElementById("contact_message");
-    
+
     if(email_t.value.trim() === "" || subject_t.value.trim() ==="" || message_t.value.trim() ==="") {
         var div = document.createElement('div');
         div.value = "Something wrong in the form";
@@ -99,7 +118,7 @@ function processForm(e) {
         var data = {email: email_t.value, subject: subject_t.value, message: message_t.value};
         redirectPost("", data)
     }
-    
+
     return false;
 }
 

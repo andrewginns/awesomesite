@@ -15,27 +15,31 @@ body {
 color: blue;
 }*/
 
+
 article {
     padding: 2em;
     border-width: 1em;
     border-color: blue;
 }
 
+section.home_panel {
+    max-width: 60vw;
+    margin: auto;
+    position: relative;
+    background-color: rgb(256, 256, 256);
+}
+
 section.section_summary {
     color: rgb(247, 24, 98);
 }
 
-/*use these sort of comment braces*/
-
-section.home_panel {
-    max-width: 60em;
+div.col-lg-6 instaimg {
     margin: auto;
-    position: relative;
-    z-index: 9998;
-    background-color: rgb(256, 256, 256);
+    top: 0;
+    left: 0;
+    right: 0;
 }
 
-/*use these sort of comment braces*/
 h1 {
     font-size: 2.5em;
     margin: 0px;
