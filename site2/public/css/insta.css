@@ -1,28 +1,40 @@
 #insta_section {
-    
+    color: rgb(247, 24, 98);
 }
 
 #instafeed {
-  max-width: 1080px;
-  width: 100%;
-  margin: auto;
-  display: flex;
-  flex-wrap: wrap;
+    max-width: 1080px;
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
 }
 #instafeed a {
-  display: flex;
-  align-items: center;
-  position: relative;
-  width: 50%;
-  background: white;
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 50%;
+    background: white;
+    margin: auto;
 }
+
+.img-post{
+    margin:5%;
+    width: 89%;
+    -moz-transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.img-post:hover {
+    -moz-transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
 @media only screen and (min-width: 580px) {
-  #instafeed a {
-    width: 25%;
-  }
-}
-#instafeed a img {
-  display: block;
-  width: 100%;
+    #instafeed a {
+        width: 25%;
+    }
 }
 
