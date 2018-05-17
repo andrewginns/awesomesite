@@ -24,7 +24,7 @@ function start() {
     //    document.querySelector(".svg button pulse").getSVGDocument().getElementById("svgInternalID").setAttribute("fill", "red")
 
 //    console.log("listening for clicks")
-//    document.getElementById("contact_submit").addEventListener("click", processForm);
+    document.getElementById("contact_submit").addEventListener("click", processForm);
 //    console.log("listening for clicks")
 
 //    setTimeout(pollBar, 200)
