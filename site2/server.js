@@ -181,7 +181,6 @@ function htmlContentNegotiation(request, extension, type) {
             } 
         }else {
             type = otype;
-            type = otype;
         }
     }
     return type;
