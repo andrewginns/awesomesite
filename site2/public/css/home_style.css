@@ -3,18 +3,10 @@
 }
 
 body {
-    min-width: 640px;
-    background-color: rgb(242, 242, 242);
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
+    background-color: black;
+    margin: 0;
+    padding: 0;
 }
-
-/*#contact {
-color: blue;
-}*/
-
 
 article {
     padding: 2em;
@@ -23,7 +15,6 @@ article {
 }
 
 section.home_panel {
-    max-width: 60vw;
     margin: auto;
     position: relative;
     background-color: rgb(256, 256, 256);
@@ -31,23 +22,12 @@ section.home_panel {
 
 section.section_summary {
     color: rgb(247, 24, 98);
-}
-
-div.col-lg-6 instaimg {
-    margin: auto;
-    top: 0;
-    left: 0;
-    right: 0;
-}
-
-h1 {
-    font-size: 2.5em;
-    margin: 0px;
+    padding: 2em;
 }
 
 h2 {
     background-color: rgb(101, 142, 156);
-    font-size: 1.6em;
+    font-size: 2.6em;
     padding: 0.5em;
     margin: 0.8em 0em;
     width=1em;
@@ -64,18 +44,9 @@ h2 {
     padding: 0.3em;
 }
 
-h2 em {
-    font-weight: bold;
-}
 
 /*one type in another type*/
 
-/*h2 {
-display: block;
-font-size: 1.5em;
-font-weight: bold;
-margin: 0.83em 0;
-}*/
 
 /*768px or smaller*/
 @media screen and (max-width: 768px) {

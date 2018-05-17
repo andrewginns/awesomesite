@@ -11,15 +11,21 @@ function loadFeed(){
         accessToken: '1438033383.1677ed0.f526a694aa844fc2afaa94b476af20aa',
         sortBy: 'most-recent',
         template: '<a href="{{image}}" title="{{caption}}" target="_blank"><img src="{{image}}" alt="{{caption}}" class="img-post"/></a>',
-        
+
     });
+
+    var button = document.getElementById("more");
 
 
     userFeed.run();
     //    var i = document.getElementsByClassName('gallery');
     //    console.log(i);
 
-    // This will create a single gallery from all elements that have class "gallery"
+    button.addEventListener("click", function() {
+        userFeed.next();
+    });
+
+    //on click popup gallery
     $('.gallery').magnificPopup({
         type: 'image',
         delegate: 'a',

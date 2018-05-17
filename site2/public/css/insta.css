@@ -1,21 +1,10 @@
-#insta_section {
-    color: rgb(247, 24, 98);
-}
-
 #instafeed {
-    max-width: 1080px;
     width: 100%;
     margin: auto;
     display: flex;
     flex-wrap: wrap;
-}
-#instafeed a {
-    display: flex;
     align-items: center;
     position: relative;
-    width: 50%;
-    background: white;
-    margin: auto;
 }
 
 .img-post{
@@ -32,9 +21,52 @@
     transform: scale(1.1);
 }
 
-@media only screen and (min-width: 580px) {
+#more{
+    color: lightgrey;
+    margin: auto;
+    background:none;
+    font-size: ;
+    border:none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: -2%;
+}
+
+#instafeed a {
+    width: 50%;
+}
+
+/*Extra small devices (portrait phones, less than 576px) No media query for `xs` since this is the default*/
+
+/*Small devices (landscape phones, 576px and up)*/
+@media (min-width: 576px) { 
+    #instafeed a {
+        width: 33%;
+    }
+}
+
+/*Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) { 
+    #instafeed a {
+        width: 33%;
+    }
+}
+
+/*Large devices (desktops, 992px and up)*/
+@media (min-width: 992px)  { 
+    #instafeed a {
+        width: 33%;
+    }
+}
+
+
+/*Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) { 
     #instafeed a {
         width: 25%;
     }
 }
+
 
