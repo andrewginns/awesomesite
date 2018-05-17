@@ -13,7 +13,7 @@
 // Choose a port, e.g. change the port to the default 80, if there are no
 // privilege issues and port number 80 isn't already in use. Choose verbose to
 // list banned files (with upper case letters) on startup.
-
+"use strict"
 var port = 8080;
 var verbose = true;
 
@@ -24,20 +24,23 @@ var http = require("http");
 var https = require("https");
 var fs = require("fs");
 var qs = require("querystring");
+var sqlDB =  require("./serverjs/sqldb.js");
 
 
 var OK = 200, BadRequest = 400, NotFound = 404, BadType = 415, Error = 500;
 var types, banned;
+var db;
 start();
 
 // Start the http service. Accept only requests from localhost, for security.
+
 function start() {
     if (!checkSite()) return;
     types = defineTypes();
     banned = [];
     banUpperCase("./public/", "");
 
-    //var app = express();
+    db = sqlDB.initialiseDB();
 
     //used to add an SSL certificate to the website
     var privateKey =  fs.readFileSync('./ssl/key.pem');
@@ -88,8 +91,8 @@ function handle(request, response) {
     if (url.endsWith("/")) url = url + "index.html";
     if (invalidURL(url)) return fail(response, BadRequest, "Permission denied");   
     if (isBanned(url)) return fail(response, NotFound, "URL has been banned");
-    console.log(request.method);
-    
+
+    if(verbose) console.log(request.method);
     if(request.method.toString().toLowerCase() === "post") {
         handlePostRequest(request, response);
     } else if (request.method.toString().toLowerCase() === "get"){
@@ -97,16 +100,16 @@ function handle(request, response) {
     } 
 }
 
+// Deals with a "GET" request
 function handleGetRequest(url, request, response) {
     var type = findType(request, url);
     if (type == null) return fail(response, BadType, "File type unsupported");
     var file = "./public" + url;
     fs.readFile(file, ready);
-    console.log(ready);
     function ready(err, content) { deliver(response, type, err, content); } 
 }
 
-// Deal with a request.
+// Deals with a "POST" request.
 function handlePostRequest(request, response) {
     var body = {text: ""};
     request.on('data', add.bind(null, body));
@@ -118,16 +121,33 @@ function add(body, chunk) {
 }
 
 function end(body, request, response) {
-    console.log("Body:", body.text);
+    if (verbose) console.log("Body:", body.text);
     reply(body, request, response);
 }
 
-// Send a reply.
+
+// Send a reply to the "POST" request
 function reply(body, request, response) {
     var params = qs.parse(body.text);
-    console.log(params.email, params.subject, params.message); 
+    trimParams(params);
+    console.log(params.email, params.subject, params.message);
+    if(validateEmail(params.email)) {
+        db.addEmail(params.email, params.subject, params.message);
+    }
     var url = "/index.html";
     handleGetRequest(url, request, response);
+    
+    //Used to trim the parameters
+    function trimParams(params) {
+        params.email = params.email.trim();
+        params.subject = params.subject.trim();
+        params.message = params.message.trim();
+    }
+    
+    //Used to validate the email address
+    function validateEmail(email) {
+        return email.includes("@") && email.length <= 254;
+    }
 }
 
 
@@ -157,7 +177,7 @@ function htmlContentNegotiation(request, extension, type) {
             var accepts = header.split(",");
             if(accepts.indexOf(type) < 0){
                 type = otype;
-                console.log("negotiated content");
+                if (verbose) console.log("negotiated html content");
             } 
         }else {
             type = otype;
