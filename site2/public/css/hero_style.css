@@ -8,26 +8,27 @@ section.hero_panel {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero_intro{
+    position: relative;
+    text-align: center;
+    display: block;
 }
 
 section.hero_panel h1 {
-    position: absolute;
+    margin: 0;
     font-size: 5em;
     font-weight: lighter;
     color: white;
     letter-spacing: 0.2em;
-    text-align: center;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
 .button {
-    fill: black;
-    position: absolute;
     width: 2%;
-    top: 60%;
-    left: 49.15%;
 }
 
 .pulse {

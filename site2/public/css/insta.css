@@ -1,5 +1,7 @@
+/*We want a tab for the personal account and a tab for the professional account*/
+
 #instafeed {
-    width: 100%;
+    width: auto%;
     margin: auto;
     display: flex;
     flex-wrap: wrap;
@@ -42,16 +44,10 @@
 
 /*Small devices (landscape phones, 576px and up)*/
 @media (min-width: 576px) { 
-    #instafeed a {
-        width: 33%;
-    }
 }
 
 /*Medium devices (tablets, 768px and up)*/
 @media (min-width: 768px) { 
-    #instafeed a {
-        width: 33%;
-    }
 }
 
 /*Large devices (desktops, 992px and up)*/

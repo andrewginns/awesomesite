@@ -6,7 +6,7 @@ function loadFeed(){
         get: 'user',
         userId: '1438033383',
         limit: 12,
-        resolution: 'low_resolution',
+        resolution: 'standard_resolution',
         clientId: '23ef45cf2fac443db9f3e6fdc6e0fe89',
         accessToken: '1438033383.1677ed0.f526a694aa844fc2afaa94b476af20aa',
         sortBy: 'most-recent',
