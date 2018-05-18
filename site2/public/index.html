@@ -3,70 +3,69 @@
 
     <head>
         <meta charset="UTF-8" />
-        <!--        <meta name="viewport" content="width=device-width, initial-scale=1", user-scalable=no>-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
         <title>Personal Website</title>
         <link runat="server" rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
         <link runat="server" rel="icon" href="favicon.ico" type="image/ico"/>
         <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet" />
         <link href="./css/polyfills.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="./css/nav_style.css" rel="stylesheet" type="text/css" />
         <link href="./css/hero_style.css" rel="stylesheet" type="text/css" />
         <link href="./css/home_style.css" rel="stylesheet" type="text/css" />
         <link href="./css/insta.css" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="./css/magnific.css">
-        <!--        <script src="./js/svg.js"></script>-->
         <script src="./js/polyfills.js"></script>
         <script src="./js/test.js"></script>
+        <script src="./js/nav.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript" src="./js/instafeed.min.js"></script>
         <script type="text/javascript" src="./js/feed.js"></script>
         <script src="./js/magnific.min.js"></script>
     </head>
 
-    <header id = "navigation">
-        <nav id="nav-bar">
-            <ul>
-                <li><a id ="home" class="nav-elem">Home</a></li>
-                <li><a id ="blog" class="nav-elem">Blog</a></li>
-                <li><a id ="projects" class="nav-elem">Projects</a></li>
-                <li><a id ="about" class="nav-elem">About</a></li>
-                <li><a id ="contact" class="nav-elem">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-
     <body>
+        <nav class="topnav" id="myTopnav">
+            <a id ="home" class="nav-elem">Home</a>
+            <a id ="blog" class="nav-elem">Blog</a>
+            <a id ="insta" class="nav-elem">Instagram</a>
+            <a id ="projects" class="nav-elem">Projects</a>
+            <a id ="about" class="nav-elem">About</a>
+            <a id ="contact" class="nav-elem">Contact</a>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                <i class="fa fa-bars"></i>
+            </a>
+        </nav>
+
         <section id = "hero_section" class="hero_panel">
             <div class = "hero_intro">
-                <h1>AESTHETIC</h1>
+                <h1>WELCOME</h1>
                 <img id ="arrow" class="svg button pulse" src='images/arrow.svg' alt="Scroll down arrow" />
             </div>
-            <!--
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128" viewBox="0 0 32 32">
-<path class="svg button pulse" d="M2000,1434l887-891,243,231L1999,1833,867,770l246-227Z"></path>
-</svg>
--->
+
         </section>
 
         <section id = "home_section" class="home_panel">
 
-            <section id="assessment_section" class="section_summary">
+            <section id="assessment_section" class="section_summary white">
                 <h2 class="center">Assesment</h2>
-                <ul>
-                    <li>C for HTML</li>
-                    <li>B for CSS</li>
-                    <li>C for JS</li>
-                    <li>C for PNG</li>
-                    <li>X for SVG</li>
-                    <li>X for Server</li>
-                    <li>X for Database</li>
-                    <li>X for Dynamic pages</li>
-                    <li>15 for Depth (out of 40)</li>
-                </ul>     
+                <article>
+                    <ul>
+                        <li>C for HTML</li>
+                        <li>B for CSS</li>
+                        <li>C for JS</li>
+                        <li>C for PNG</li>
+                        <li>X for SVG</li>
+                        <li>X for Server</li>
+                        <li>X for Database</li>
+                        <li>X for Dynamic pages</li>
+                        <li>15 for Depth (out of 40)</li>
+                    </ul>     
+                </article>
             </section>
 
-            <section id="blog_section" class="section_summary">
+            <section id="blog_section" class="section_summary grey">
                 <h2 class="center">Blog</h2>
                 <article>
                     <h3>Article 1</h3>
@@ -79,13 +78,15 @@
                 <p class="center indent"><a href="https://www.google.com">See more</a></p>
             </section>
 
-            <section id="insta_section" class="section_summary">
+
+            <section id="insta_section" class="section_summary white">
                 <h2 class="center">Instagram</h2>
                 <div id="instafeed" class="row gallery"></div>
-                <button id="more">more</button>
+                <button class = "pulse" id="more">more</button>
             </section>
 
-            <section id="projects_section" class="section_summary">
+
+            <section id="projects_section" class="section_summary grey">
                 <h2 class="center">Projects</h2>
                 <article>
                     <h3>project 1</h3>
@@ -100,7 +101,7 @@
                 <p class="center indent"><a href="https://www.google.co.uk/">GitHub repo</a></p>
             </section>
 
-            <section id="about_section" class="section_summary">
+            <section id="about_section" class="section_summary white">
                 <h2 class="center">About</h2>
                 <article>
                     <p>Mauris in dui et ex rhoncus lacinia. Nulla facilisi. Quisque quis elit in felis rhoncus facilisis aliquet sed mauris. Curabitur id commodo purus, in efficitur urna. Etiam porta, purus a eleifend aliquet, mi nisl porta nibh, et suscipit metus nisl vel ipsum. Nulla ut urna ultricies, aliquet mi eget, mattis odio. Vestibulum ut nisl nunc. Nunc ac enim ut erat rhoncus dignissim. Fusce vitae viverra quam. Sed at purus ornare, auctor nisl feugiat, consectetur enim. Sed consequat, orci lobortis commodo molestie, orci augue vulputate nunc, eu volutpat libero elit eget eros. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In hac habitasse platea dictumst. In fringilla erat at felis blandit, eu mattis massa fringilla.</p>
@@ -108,7 +109,8 @@
 
             </section>
 
-            <section id="contact_section" class="section_summary">
+
+            <section id="contact_section" class="section_summary grey">
                 <h2 class="center">Contact</h2>
                 <article>
                     <p>If you wish to get in touch, fill out the form below.</p>
@@ -130,6 +132,7 @@
                 </article>
 
             </section>
+
 
         </section>
 
