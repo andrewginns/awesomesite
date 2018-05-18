@@ -22,10 +22,11 @@ var verbose = true;
 // Start the server:
 var http = require("http");
 var https = require("https");
+var parseFormdata = require('parse-formdata')
+
 var fs = require("fs");
 var qs = require("querystring");
 var sqlDB =  require("./serverjs/sqldb.js");
-
 
 var OK = 200, BadRequest = 400, NotFound = 404, BadType = 415, Error = 500;
 var types, banned;
@@ -112,8 +113,15 @@ function handleGetRequest(url, request, response) {
 // Deals with a "POST" request.
 function handlePostRequest(request, response) {
     var body = {text: ""};
-    request.on('data', add.bind(null, body));
-    request.on('end', end.bind(null, body, request, response));
+    console.log(request.headers["content-type"]);
+    if(request.headers["content-type"] == "application/x-www-form-urlencoded") {
+        request.on('data', add.bind(null, body));
+        request.on('end', end.bind(null, body, request, response));
+    } else {
+        parseFormdata(request, parseForm.bind(null, response));
+    }
+    //console.log(request);
+
 }
 
 function add(body, chunk) {
@@ -125,29 +133,73 @@ function end(body, request, response) {
     reply(body, request, response);
 }
 
+function parseForm(response, err, data) {
+    if (err) return err;
+    console.log('fields:', data);
+    var params = data.fields;
 
-// Send a reply to the "POST" request
-function reply(body, request, response) {
-    var params = qs.parse(body.text);
+    if(Object.keys(params).length == 3) {
+        var keys = ["email", "subject", "message"];
+        var count = 0;
+
+        for (keys in data.fields){
+            count++;
+        }
+        if (count != 3) {
+            response.end('Bad Form');
+            return;
+        }
+    } else {
+        response.end('Bad Form');
+        return;
+    }
+
     trimParams(params);
     console.log(params.email, params.subject, params.message);
     if(validateEmail(params.email)) {
-        db.addEmail(params.email, params.subject, params.message);
+        db.addEmail(response, params.email, params.subject, params.message);
     }
-    var url = "/index.html";
-    handleGetRequest(url, request, response);
-    
+
     //Used to trim the parameters
     function trimParams(params) {
         params.email = params.email.trim();
         params.subject = params.subject.trim();
         params.message = params.message.trim();
     }
-    
+
     //Used to validate the email address
     function validateEmail(email) {
         return email.includes("@") && email.length <= 254;
     }
+
+}
+
+
+
+// Send a reply to the "POST" request
+function reply(body, request, response) {
+    var params = qs.parse(body.text);
+    console.log(params);
+    var count;
+    console.log(params.itemCount);
+    if(Object.keys(params).length == 2) {
+        var keys = ["blogs", "itemCount"];
+        var count = 0;
+        for (keys in params){
+            count++;
+        }
+        if (count != 2) {
+            response.end('Bad Form');
+            return;
+        }
+        params.itemCount = parseInt(params.itemCount) + 1;
+        console.log(params.itemCount);
+    }else {
+        response.end('Bad Form');
+        return;
+    }
+
+    db.sendBlogs(response, params.itemCount);
 }
 
 
