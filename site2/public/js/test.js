@@ -13,21 +13,18 @@ function start() {
     //    document.getElementById("projects").addEventListener("click", jumpTo.bind(null, "projects_section"), false);
     //    document.getElementById("about").addEventListener("click", jumpTo.bind(null, "about_section"), false);
     //    document.getElementById("contact").addEventListener("click", jumpTo.bind(null, "contact_section"), false);
-
-    //    document.getElementById("arrow").addEventListener("click", smoothScroll.bind(null, "assessment_section"), false);
-    //    document.getElementById("home").addEventListener("click", smoothScroll.bind(null, "hero_section"), false);
-    //    document.getElementById("blog").addEventListener("click", smoothScroll.bind(null, "blog_section"), false);
-    //    document.getElementById("projects").addEventListener("click", smoothScroll.bind(null, "projects_section"), false);
-    //    document.getElementById("about").addEventListener("click", smoothScroll.bind(null, "about_section"), false);
-    //    document.getElementById("contact").addEventListener("click", smoothScroll.bind(null, "contact_section"), false);
-
+    document.getElementById("arrow").addEventListener("click", smoothScroll.bind(null, "assessment_section"), false);
+    document.getElementById("home").addEventListener("click", smoothScroll.bind(null, "hero_section"), false);
+    document.getElementById("blog").addEventListener("click", smoothScroll.bind(null, "blog_section"), false);
+    document.getElementById("projects").addEventListener("click", smoothScroll.bind(null, "projects_section"), false);
+    document.getElementById("about").addEventListener("click", smoothScroll.bind(null, "about_section"), false);
+    document.getElementById("contact").addEventListener("click", smoothScroll.bind(null, "contact_section"), false);
     //    document.querySelector(".svg button pulse").getSVGDocument().getElementById("svgInternalID").setAttribute("fill", "red")
 
     //    console.log("listening for clicks")
     document.getElementById("contact_submit").addEventListener("click", processForm);
-    //    console.log("listening for clicks")
-
-    //    setTimeout(pollBar, 200)
+    document.getElementById("more_blogs").addEventListener("click", retrieve);
+    retrieve();
 } 
 
 //function pollBar(){
@@ -55,52 +52,52 @@ function start() {
 //    console.log("click");
 //}
 
-//function currentYPosition() {
-//    // Firefox, Chrome, Opera, Safari
-//    if (self.pageYOffset) return self.pageYOffset;
-//    // Internet Explorer 6 - standards mode
-//    if (document.documentElement && document.documentElement.scrollTop)
-//        return document.documentElement.scrollTop;
-//    // Internet Explorer 6, 7 and 8
-//    if (document.body.scrollTop) return document.body.scrollTop;
-//    return 0;
-//}
-//
-//
-//function elmYPosition(eID) {
-//    var elm = document.getElementById(eID);
-//    var y = elm.offsetTop;
-//    var node = elm;
-//    while (node.offsetParent && node.offsetParent != document.body) {
-//        node = node.offsetParent;
-//        y += node.offsetTop;
-//    } return y*0.95;
-//}
-//
-//
-//function smoothScroll(eID) {
-//    var startY = currentYPosition();
-//    var stopY = elmYPosition(eID);
-//    var distance = stopY > startY ? stopY - startY : startY - stopY;
-//    if (distance < 100) {
-//        scrollTo(0, stopY); return;
-//    }
-//    var speed = Math.round(distance / 100);
-//    if (speed >= 20) speed = 20;
-//    var step = Math.round(distance / 25);
-//    var leapY = stopY > startY ? startY + step : startY - step;
-//    var timer = 0;
-//    if (stopY > startY) {
-//        for ( var i=startY; i<stopY; i+=step ) {
-//            setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
-//            leapY += step; if (leapY > stopY) leapY = stopY; timer++;
-//        } return;
-//    }
-//    for ( var i=startY; i>stopY; i-=step ) {
-//        setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
-//        leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
-//    }
-//}
+function currentYPosition() {
+    // Firefox, Chrome, Opera, Safari
+    if (self.pageYOffset) return self.pageYOffset;
+    // Internet Explorer 6 - standards mode
+    if (document.documentElement && document.documentElement.scrollTop)
+        return document.documentElement.scrollTop;
+    // Internet Explorer 6, 7 and 8
+    if (document.body.scrollTop) return document.body.scrollTop;
+    return 0;
+}
+
+
+function elmYPosition(eID) {
+    var elm = document.getElementById(eID);
+    var y = elm.offsetTop;
+    var node = elm;
+    while (node.offsetParent && node.offsetParent != document.body) {
+        node = node.offsetParent;
+        y += node.offsetTop;
+    } return y*0.95;
+}
+
+
+function smoothScroll(eID) {
+    var startY = currentYPosition();
+    var stopY = elmYPosition(eID);
+    var distance = stopY > startY ? stopY - startY : startY - stopY;
+    if (distance < 100) {
+        scrollTo(0, stopY); return;
+    }
+    var speed = Math.round(distance / 100);
+    if (speed >= 20) speed = 20;
+    var step = Math.round(distance / 25);
+    var leapY = stopY > startY ? startY + step : startY - step;
+    var timer = 0;
+    if (stopY > startY) {
+        for ( var i=startY; i<stopY; i+=step ) {
+            setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
+            leapY += step; if (leapY > stopY) leapY = stopY; timer++;
+        } return;
+    }
+    for ( var i=startY; i>stopY; i-=step ) {
+        setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
+        leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
+    }
+}
 
 function processForm(e) {
     if (e.preventDefault) e.preventDefault();
@@ -134,9 +131,52 @@ function redirectPost(url, data) {
         input.value = data[name];
         form.appendChild(input);
     }
-    form.submit();
-    window.href = "google.com"
+
+    var XHR = new XMLHttpRequest();
+
+    // Define what happens on successful data submission
+    XHR.addEventListener("load", function(event) {
+        alert(event.target.responseText);
+    });
+
+    // Define what happens in case of error
+    XHR.addEventListener("error", function(event) {
+        alert('Oops! Something went wrong.');
+    });
+
+    // Bind the FormData object and the form element
+    var FD = new FormData(form);
+    // Set up our request
+    XHR.open("POST", url);
+    // The data sent is what the user provided in the form
+    XHR.send(FD);
+    document.getElementById("projects_section").innerHTML = XHR.responseText;
+
+    //form.submit();
 }
+
+function retrieve() {
+    var count = document.querySelectorAll("#blog_section > article").length;
+    console.log(count);
+    var XHR = new XMLHttpRequest();
+    XHR.addEventListener("load", function(event) {
+        document.querySelector("#blog_section > h2").insertAdjacentHTML("afterend", event.target.responseText);
+    });
+    
+    // Define what happens in case of error
+    XHR.addEventListener("error", function(event) {
+        alert('Oops! Something went wrong.');
+    });
+    XHR.open("POST", "", true);
+    //XHR.setRequestHeader("Content-type", "text/html");
+    XHR.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    XHR.send("blogs=1&itemCount=" +count);
+    // Define what happens on successful data submission
+}
+
+
+
+
 
 function backToTop() {
     window.scrollTo(0,0);
