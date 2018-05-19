@@ -7,9 +7,11 @@ function start() {
     window.unload = backToTop;
 
     document.getElementById("more_blogs").addEventListener("click", retrieveBlogs);
+    document.getElementById("more_projects").addEventListener("click", retrieveProjects);
     document.getElementById("contact_submit").addEventListener("click", processForm);
 
     retrieveBlogs();
+    retrieveProjects();
 }
 
 function processForm(e) {
@@ -41,16 +43,20 @@ function validateFormData (params) {
     if(err) {
         return "Empty Fields";
     }
+<<<<<<< HEAD
     
     if (isNaN(params.mailList)) {
         return "Invalid Form";
     }
     
+=======
+
+>>>>>>> 5dd04ac1e950747f06a040711c32f9c4a28b3001
     if(!validateEmail(params.email)) {
         return "Invalid Email Address";
     }
     return errMessage;
-    
+
     //Used to trim the parameters
     //return false if any of the parameters are empty
     function trimParams(params) {
@@ -64,7 +70,7 @@ function validateFormData (params) {
     function validateEmail(email) {
         return email.includes("@") && email.length <= 254;
     }
-    
+
 }
 
 function redirectPost(url, data) {
@@ -117,7 +123,7 @@ function retrieveBlogs() {
             document.getElementById("more_blogs").className = "fadeout";
             document.getElementById("more_blogs").innerHTML = "no more";  
         }
-        
+
         document.querySelector("#blog_section > h2").insertAdjacentHTML("afterend", getBlogHTML(list));
     });
 
@@ -133,26 +139,80 @@ function retrieveBlogs() {
 }
 
 function getBlogHTML(rows) {
-        
-        var text = "";
-        console.log("rows: ", rows);
-        if(rows.length > 0) {
-            for (let index in rows) {
-                text += blogHtml(rows[index])+ "\n";
-            }
+
+    var text = "";
+    console.log("rows: ", rows);
+    if(rows.length > 0) {
+        for (let index in rows) {
+            text += blogHtml(rows[index])+ "\n";
         }
-        return text;
-        
-        function blogHtml(row){
-            var html = ["<article>", 
+    }
+    return text;
+
+    function blogHtml(row){
+        var html = ["<article>", 
                     "<h3>"+ row.title +"</h3>",
                     "<p>"+ row.message + "</p>",
+                    "<div id='spacer'></div>",
                     "</article>"].join("\n");
-            return html;
-            
-        }
-        
+        return html;
+
     }
+
+}
+
+function retrieveProjects() {
+
+    var count = document.querySelectorAll("#projects_section > article").length;
+    console.log(count);
+    var XHR = new XMLHttpRequest();
+    XHR.addEventListener("load", function(event) {
+        var list = JSON.parse(this.responseText);
+        console.log(list);
+        var more = list.splice(-1,1)[0];
+        console.log(more["more"]);
+        if(!more["more"]) {
+            document.getElementById("more_projects").removeEventListener("click", retrieveProjects);
+            document.getElementById("more_projects").className = "fadeout";
+            document.getElementById("more_projects").innerHTML = "no more";  
+        }
+
+        document.querySelector("#projects_section > h2").insertAdjacentHTML("afterend", getProjectHTML(list));
+    });
+
+    // Define what happens in case of error
+    XHR.addEventListener("error", function(event) {
+        alert('Oops! Something went wrong.');
+    });
+    XHR.open("POST", "", true);
+    //XHR.setRequestHeader("Content-type", "text/html");
+    XHR.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    XHR.send("projects=1&itemCount=" +count);
+    // Define what happens on successful data submission
+}
+
+function getProjectHTML(rows) {
+
+    var text = "";
+    console.log("rows: ", rows);
+    if(rows.length > 0) {
+        for (let index in rows) {
+            text += projectHtml(rows[index])+ "\n";
+        }
+    }
+    return text;
+
+    function projectHtml(row){
+        var html = ["<article>", 
+                    "<h3>"+ row.title +"</h3>",
+                    "<p>"+ row.message + "</p>",
+                    "<div id='spacer'></div>",
+                    "</article>"].join("\n");
+        return html;
+
+    }
+
+}
 
 function backToTop() {
     window.scrollTo(0,0);
