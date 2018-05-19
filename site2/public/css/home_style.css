@@ -63,7 +63,6 @@ article {
 }
 
 #scrollup path {
-    stroke:#f71862;
     fill:transparent;
     stroke-width: 10px;
 }
@@ -102,7 +101,6 @@ input[type="checkbox"] {
     background:none;
     font-size: 1.5em;
     display: flex;
-    color: #f71862;
 }
 
 .slider {
@@ -135,8 +133,18 @@ footer {
     animation-direction: alternate;
     -webkit-animation-name: pulse;
     animation-name: pulse;
+    cursor: pointer;
+    color: #f71862;
+    stroke:#f71862;
 }
 
+.pulse:hover {
+    stroke: #000000;
+    color: #000000;
+    transform: scale(1);
+}
+
+/*for back wards compatibility*/
 @-webkit-keyframes pulse {
     0% {
         -webkit-transform: scale(1);
@@ -146,6 +154,19 @@ footer {
     }
     100% {
         -webkit-transform: scale(1);
+    }
+}
+
+/*for back wards compatibility*/
+@-moz-keyframes animation_m {
+    0% {
+        -moz-transform:scale(1);
+    }
+    50% {
+        -moz-transform: scale(1.2);
+    }
+    100% {
+        -moz-transform:scale(1);
     }
 }
 
@@ -162,9 +183,9 @@ footer {
 }
 
 .fadeout {
-  visibility: visible;
-  opacity: 0.4;
-  transition: visibility 0s 1s, opacity 0.8s linear;
+    visibility: visible;
+    opacity: 0.4;
+    transition: visibility 0s 1s, opacity 0.8s linear;
 }
 
 /*Extra small devices (portrait phones, less than 576px) No media query for `xs` since this is the default*/

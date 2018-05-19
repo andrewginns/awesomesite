@@ -30,6 +30,7 @@ section.hero_panel h1 {
     margin: auto;
     margin-top: -2em;
     height: 3em;
+    cursor: pointer;
 }
 
 .arrows path {
@@ -38,6 +39,10 @@ section.hero_panel h1 {
     stroke-width: 5px;	
     animation: arrow 2s infinite;
     -webkit-animation: arrow 2s infinite; 
+}
+
+.arrows path:hover {
+    stroke: #f71862;
 }
 
 @keyframes arrow
