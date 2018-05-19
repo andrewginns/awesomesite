@@ -94,7 +94,7 @@ input[type="checkbox"] {
     width: auto;
 }
 
-#contact_submit, #more_blogs {
+#contact_submit, #more_blogs, #more_projects {
     border: none;
     margin: auto;
     padding: 0.5em;
