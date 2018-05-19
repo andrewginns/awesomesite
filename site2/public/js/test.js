@@ -9,6 +9,7 @@ function start() {
 
     document.getElementById("contact_submit").addEventListener("click", processForm);
     document.getElementById("more_blogs").addEventListener("click", retrieve);
+    document.getElementById("contact_submit").addEventListener("click", reveal.bind(null, "hi"));
     retrieve();
 } 
 
@@ -32,6 +33,7 @@ function processForm(e) {
 
     return false;
 }
+
 
 function redirectPost(url, data) {
     var form = document.createElement('form');
@@ -69,6 +71,7 @@ function redirectPost(url, data) {
     //form.submit();
 }
 
+
 function retrieve() {
     var count = document.querySelectorAll("#blog_section > article").length;
     console.log(count);
@@ -76,7 +79,7 @@ function retrieve() {
     XHR.addEventListener("load", function(event) {
         document.querySelector("#blog_section > h2").insertAdjacentHTML("afterend", event.target.responseText);
     });
-    
+
     // Define what happens in case of error
     XHR.addEventListener("error", function(event) {
         alert('Oops! Something went wrong.');
@@ -89,8 +92,20 @@ function retrieve() {
 }
 
 
-
 function backToTop() {
     window.scrollTo(0,0);
 }
+
+
+//function reveal() {
+//     document.getElementById("slider").classList.toggle("open");
+//}
+
+function reveal(text) {
+    console.log(text);
+    document.querySelector('#slider').innerHTML = text;
+    $('#slider').fadeIn();
+    $('#slider').delay(1000).fadeOut();
+}
+
 

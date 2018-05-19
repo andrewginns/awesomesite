@@ -41,6 +41,21 @@ article {
     line-height: 1.4em;
 }
 
+#scrollup {
+    display: none;
+    position: fixed;
+    padding-top:2em;
+    left: 93vw;
+    bottom: 6vh;
+    height: 4em;
+}
+
+#scrollup path {
+    stroke:#f71862;
+    fill:transparent;
+    stroke-width: 10px;
+}
+
 .center {
     text-align: center;
 }
@@ -55,15 +70,102 @@ textarea, input {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 100%;
+    padding: 1em 1.2em;
 }
 
 textarea {
     height: 10em;
+    resize: none;
 }
 
 input[type="checkbox"] {
     display: inline-block;
     width: auto;
+}
+
+#contact_submit, #more_blogs {
+    border: none;
+    margin: auto;
+    padding: 0.5em;
+    background:none;
+    font-size: 1.5em;
+    display: flex;
+    color: rgb(247, 24, 98);
+}
+
+.slider {
+    position: fixed;
+    display: none;
+    text-align: center;
+    color: rgb(247, 24, 98);
+    background-color: black;
+    padding: 0;
+    height: 3em;
+    line-height: 3em;
+    bottom: 0;
+    width: 100vw;
+
+}
+
+/*
+.slider {
+height: 0;
+position: fixed;
+}
+
+.slider.open {
+overflow-y: hidden;
+height: 3em;
+line-height: 3em;
+background-color: white;
+text-align: center;
+
+transition-property: all;
+transition-duration: .5s;
+transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+*/
+
+footer {
+    background-color: rgb(247, 24, 98);
+    color: white;
+    text-align: center;
+    padding: 1em;
+}
+
+#footer_text {
+    margin: 0;
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+    animation-direction: alternate;
+    -webkit-animation-name: pulse;
+    animation-name: pulse;
+}
+
+@-webkit-keyframes pulse {
+    0% {
+        -webkit-transform: scale(1);
+    }
+    50% {
+        -webkit-transform: scale(1.2);
+    }
+    100% {
+        -webkit-transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 /*Extra small devices (portrait phones, less than 576px) No media query for `xs` since this is the default*/
