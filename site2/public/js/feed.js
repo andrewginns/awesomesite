@@ -16,6 +16,8 @@ function loadFeed(){
             //disable button if no ore results to load
             if (!this.hasNext()) {
                 button.setAttribute('disabled', 'disabled');
+                button.className = "fadeout";
+                button.innerHTML = "no more";  
             }
         }
     });

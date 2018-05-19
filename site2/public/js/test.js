@@ -3,21 +3,14 @@ addEventListener('load', start);
 function start() { 
     console.log("scroll to top");
 
-    console.log("scroll to top");
     window.onbeforeunload = backToTop;
     window.unload = backToTop;
 
-    document.getElementById("contact_submit").addEventListener("click", processForm);
-<<<<<<< HEAD
     document.getElementById("more_blogs").addEventListener("click", retrieveBlogs);
-    retrieveBlogs();
-=======
-    document.getElementById("more_blogs").addEventListener("click", retrieve);
-    document.getElementById("contact_submit").addEventListener("click", reveal.bind(null, "hi"));
-    retrieve();
->>>>>>> 30c440eaf30ddf593914f6118c5ae76d9699e4ad
-} 
+    document.getElementById("contact_submit").addEventListener("click", processForm);
 
+    retrieveBlogs();
+}
 
 function processForm(e) {
     if (e.preventDefault) e.preventDefault();
@@ -26,17 +19,17 @@ function processForm(e) {
     var subject_t = document.getElementById("contact_subject").value;
     var message_t = document.getElementById("contact_message").value;
     var params = {email: email_t, subject: subject_t, message: message_t};
+    console.log(params);
     var errMessage = validateFormData (params);
     if(errMessage.length === 0){
         redirectPost("", params)
     } else {
-        alert(errMessage);
+        reveal(errMessage);
     }
 
     return false;
 }
 
-<<<<<<< HEAD
 //used to validate the form input
 //sends a message to the client if an error occurs
 //return trues if validation passes, otherwise false
@@ -44,7 +37,7 @@ function validateFormData (params) {
     var errMessage = "";
     var err = trimParams(params);
     if(err) {
-        return "Invalid Parameters - form fields must not be empty";
+        return "Empty Fields";
     }
     
     if(!validateEmail(params.email)) {
@@ -67,8 +60,6 @@ function validateFormData (params) {
     }
     
 }
-=======
->>>>>>> 30c440eaf30ddf593914f6118c5ae76d9699e4ad
 
 function redirectPost(url, data) {
     var form = document.createElement('form');
@@ -87,7 +78,7 @@ function redirectPost(url, data) {
 
     // Define what happens on successful data submission
     XHR.addEventListener("load", function(event) {
-        alert(event.target.responseText);
+        reveal(event.target.responseText);
     });
 
     // Define what happens in case of error
@@ -105,12 +96,8 @@ function redirectPost(url, data) {
     //form.submit();
 }
 
-<<<<<<< HEAD
 function retrieveBlogs() {
-=======
 
-function retrieve() {
->>>>>>> 30c440eaf30ddf593914f6118c5ae76d9699e4ad
     var count = document.querySelectorAll("#blog_section > article").length;
     console.log(count);
     var XHR = new XMLHttpRequest();
@@ -122,7 +109,7 @@ function retrieve() {
         if(!more["more"]) {
             document.getElementById("more_blogs").removeEventListener("click", retrieveBlogs);
             document.getElementById("more_blogs").className = "fadeout";
-            document.getElementById("more_blogs").innerHTML = "No More.";  
+            document.getElementById("more_blogs").innerHTML = "no more";  
         }
         
         document.querySelector("#blog_section > h2").insertAdjacentHTML("afterend", getBlogHTML(list));
@@ -138,9 +125,6 @@ function retrieve() {
     XHR.send("blogs=1&itemCount=" +count);
     // Define what happens on successful data submission
 }
-
-
-<<<<<<< HEAD
 
 function getBlogHTML(rows) {
         
@@ -164,18 +148,9 @@ function getBlogHTML(rows) {
         
     }
 
-
-
-=======
->>>>>>> 30c440eaf30ddf593914f6118c5ae76d9699e4ad
 function backToTop() {
     window.scrollTo(0,0);
 }
-
-
-//function reveal() {
-//     document.getElementById("slider").classList.toggle("open");
-//}
 
 function reveal(text) {
     console.log(text);

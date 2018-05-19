@@ -1,6 +1,6 @@
 "use strict";
 addEventListener('load', start);
-function start() { 
+function start() {
     document.getElementById("arrow").addEventListener("click", smoothScroll.bind(null, "assessment_section"), false);
     document.getElementById("scrollup").addEventListener("click", smoothScroll.bind(null, "assessment_section"), false);
     document.getElementById("home").addEventListener("click", smoothScroll.bind(null, "hero_section"), false);

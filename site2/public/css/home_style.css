@@ -168,6 +168,12 @@ footer {
     }
 }
 
+.fadeout {
+  visibility: visible;
+  opacity: 0.4;
+  transition: visibility 0s 1s, opacity 0.8s linear;
+}
+
 /*Extra small devices (portrait phones, less than 576px) No media query for `xs` since this is the default*/
 
 /*Small devices (landscape phones, 568px and up)*/
