@@ -2,13 +2,5 @@
 magic_leap_idea/DSCF8789-HDR.png
 site2.zip
 site2/package-lock.json
-node_modules/nodemailer/README.md
 *.json
-node_modules/nodemailer/LICENSE
-node_modules/nodemailer/lib/xoauth2/index.js
-node_modules/nodemailer/lib/well-known/index.js
-node_modules/nodemailer/lib/stream-transport/index.js
-node_modules/nodemailer/lib/smtp-transport/index.js
-node_modules/nodemailer/lib/smtp-pool/pool-resource.js
-node_modules/nodemailer/lib/smtp-pool/index.js
-node_modules/nodemailer/lib/smtp-connection/index.js
+node_modules/
