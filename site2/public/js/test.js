@@ -18,9 +18,11 @@ function processForm(e) {
     var email_t = document.getElementById("contact_e_mail").value;
     var subject_t = document.getElementById("contact_subject").value;
     var message_t = document.getElementById("contact_message").value;
-    var params = {email: email_t, subject: subject_t, message: message_t};
+    var mailList_t = document.querySelector('#contact_mail:checked').value? 1 : 0;
+    console.log(mailList_t);
+    var params = {email: email_t, mailList: mailList_t, subject: subject_t, message: message_t};
     console.log(params);
-    var errMessage = validateFormData (params);
+    var errMessage = validateFormData(params);
     if(errMessage.length === 0){
         redirectPost("", params)
     } else {
@@ -38,6 +40,10 @@ function validateFormData (params) {
     var err = trimParams(params);
     if(err) {
         return "Empty Fields";
+    }
+    
+    if (isNaN(params.mailList)) {
+        return "Invalid Form";
     }
     
     if(!validateEmail(params.email)) {
@@ -85,7 +91,7 @@ function redirectPost(url, data) {
     XHR.addEventListener("error", function(event) {
         alert('Oops! Something went wrong.');
     });
-
+    
     // Bind the FormData object and the form element
     var FD = new FormData(form);
     // Set up our request

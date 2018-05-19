@@ -114,12 +114,11 @@ function handleGetRequest(url, request, response) {
 // Deals with a "POST" request.
 function handlePostRequest(request, response) {
     var body = {text: ""};
-    console.log(request.headers["content-type"]);
-    
+    if (verbose) console.log(request.headers["content-type"]);
     if(request.headers["content-type"] == "application/x-www-form-urlencoded") {
         request.on('data', add.bind(null, body));
         request.on('end', end.bind(null, body, request, response));
-    } else {
+    } else if (request.headers["content-type"].includes("multipart/form-data")){
         parseFormdata(request, processForm.bind(null, response));
     }
     
@@ -137,33 +136,32 @@ function end(body, request, response) {
 
 //used to parse, validate, process and respond to the form input
 function processForm(response, err, data) {
-    if (err) return err;
-    console.log('fields:', data);
-    var valid = validateFormData(response, data);
+    if (err) {return err;}
+    var params = data.fields;
+    console.log('fields:', params);
+    var valid = validateFormData(response, params);
     
     if(valid) {
-        var params = data.fields;
-        if(verbose)console.log("Adding", params.email, params.subject, params.message);
-        db.addEmail(response, params.email, params.subject, params.message);
+        if(verbose)console.log("Adding", params.email, params.mailList, params.subject, params.message);
+        db.addEmail(response, params.email, params.mailList, params.subject, params.message);
     }
 }
 
 //used to validate the form input
 //sends a message to the client if an error occurs
 //return trues if validation passes, otherwise false
-function validateFormData (response, data) {
-    var params = data.fields;
+function validateFormData (response, params) {
     var valid = true;
     var notValid = false;
-    if(Object.keys(params).length == 3) {
-        var keys = ["email", "subject", "message"];
+    if(Object.keys(params).length === 4) {
+        var keys = ["email", "mailList", "subject", "message"];
         var count = 0;
 
-        for (keys in data.fields){
+        for (keys in params){
             count++;
         }
         
-        if (count != 3) {
+        if (count != 4) {
             fail(response, NotImp, "Invalid Form");
             return notValid;
         }
@@ -173,8 +171,8 @@ function validateFormData (response, data) {
     }
     
     var err = trimParams(params);
-    if(err) {
-        fail(response, NotImp, "Invalid Parameters - form fields must not be empty");
+    if(err || isNaN(params.mailList)) {
+        fail(response, NotImp, "Invalid Parameters");
         return notValid;
     }
     
@@ -182,6 +180,7 @@ function validateFormData (response, data) {
         fail(response, BadType, "Invalid Email Address");
         return notValid;
     }
+    console.log(valid)
     
     return valid;
     
@@ -207,25 +206,42 @@ function reply(body, request, response) {
     console.log(params);
     var count;
     console.log(params.itemCount);
+    var blogs = true;
     if(Object.keys(params).length == 2) {
-        var keys = ["blogs", "itemCount"];
+        var keys = ["itemCount"];
+        var type = ["blogs", "projects"];
         var count = 0;
         
         for (keys in params){
             count++;
         }
+        
+        for (type in params) {
+            count++;
+        }
+        
         if (count != 2) {
-            response.end('Bad Form');
+            fail(response, NotImp, "Invalid Form");
             return;
         }
-        params.itemCount = parseInt(params.itemCount) + 1;
+        
+        if (!("blogs" in params)) {blogs = false;}
+        
+        if (isNaN(params.itemCount)) {
+            fail(response, NotImp, "Bad Request");
+        }
+        params.itemCount = params.itemCount + 1;
         console.log(params.itemCount);
     }else {
-        response.end('Bad Form');
+        fail(response, NotImp, "Invalid Form");
         return;
     }
-
-    db.sendBlogs(response, params.itemCount);
+    
+    if(blogs) {
+        db.sendBlogs(response, params.itemCount);
+    }else {
+        db.sendProjects(response, params.itemCount);
+    }
 }
 
 

@@ -26,16 +26,18 @@ function sqlDB() {
     var insertMessageQuery;
     var insertBlogQuery;
     var selectBlogQuery;
+    var insertProjectQuery;
+    var selectProjectQuery;
     function initialiseTablesAndQueries() {
-        //deleteTable("Emails");
+        deleteTable("Emails");
         db.run("pragma foreign_keys=on");
-        db.run("CREATE TABLE IF NOT EXISTS Emails (eId INTEGER PRIMARY KEY,email VARCHAR UNIQUE)");//email can be 254 bytes, the storage size is the actual length of the data entered + 2 bytes
+        db.run("CREATE TABLE IF NOT EXISTS Emails (eId INTEGER PRIMARY KEY,email VARCHAR UNIQUE, mailList INTEGER NOT NULL)");//email can be 254 bytes, the storage size is the actual length of the data entered + 2 bytes
         //primary key will be auto generated
-        insertEmailQuery = db.prepare("INSERT OR IGNORE INTO Emails(email) VALUES(?)");
+        insertEmailQuery = db.prepare("INSERT OR IGNORE INTO Emails(email, mailList) VALUES(?, ?)");
         insertMessageQuery = db.prepare("INSERT INTO Messages SELECT ?,?, eId FROM Emails WHERE email =?");
 
 
-        //deleteTable("Messages");
+        deleteTable("Messages");
         db.run("CREATE TABLE IF NOT EXISTS Messages (subject TEXT, message TEXT, emailId INTEGER, CONSTRAINT FK_EmailRel FOREIGN KEY (emailId) REFERENCES Emails(eId))");
 
         deleteTable("Blogs");
@@ -53,6 +55,23 @@ function sqlDB() {
         db.run("ALTER TABLE BlogsOrdered RENAME TO Blogs");
         db.all("SELECT * FROM Blogs", show);
         getBlogCount();
+        
+        
+         deleteTable("Projects");
+        deleteTable("ProjectsOrdered");
+        db.run("CREATE TABLE IF NOT EXISTS Projects(title TEXT, message TEXT, date INTEGER)");
+        insertProjectQuery = db.prepare("INSERT OR IGNORE INTO Projects(title, message, date) VALUES(?,?,?)");
+        selectProjectQuery = db.prepare("SELECT * FROM Blogs WHERE rowid = ?");
+
+        addProject("project1", "mesage", "2");
+        addProject("project2", "mesage", "1");
+        addProject("project 3", "mesage", "4");
+        
+        db.run("CREATE TABLE IF NOT EXISTS ProjectsOrdered(title TEXT, message TEXT, date INTEGER)");
+        db.run("INSERT INTO ProjectsOrdered(title, message, date) SELECT title,message,date FROM Projects ORDER BY date ASC");
+        db.run("DROP TABLE Projects");
+        db.run("ALTER TABLE ProjectsOrdered RENAME TO Projects");
+        db.all("SELECT * FROM Projects", show);
     }
 
     function setGracefulShutdown() {
@@ -65,6 +84,7 @@ function sqlDB() {
             selectBlogQuery.finalize();
             db.close();
             console.log("DB closed");
+            process.exit(0);
             process.exit(0);
         }
         console.log("Shutdown Handler set");
@@ -80,14 +100,31 @@ function sqlDB() {
             console.log(row);
         }
     }
+    
+    var projectCount = 0;
+    //used to get the count of projects
+    function getProjectCount() {
+        db.each("SELECT COUNT(*) FROM Projects", countCallBack);
+        function countCallBack(err, row) {
+            if (err) throw err;
+            projectCount = row['COUNT(*)'];
+            console.log(row);
+        }
+    }
 
     //used to insert a blog into the Blog table
     function addBlog(title, message, date) {
         console.log("Adding Blog");
         insertBlogQuery.run(title, message, date, genericErrorLog);
     }
+    
+    //used to insert a blog into the Blog table
+    function addProject(title, message, date) {
+        console.log("Adding Project");
+        insertProjectQuery.run(title, message, date, genericErrorLog);
+    }
 
-    //used to get a blog corresponding to the 
+    //used to get a blog corresponding to the itemCount
     function sendBlogs(response, itemCount) {
         if (itemCount <= blogCount){
             selectBlogQuery.each(itemCount, sendSelectedBlogs.bind(null, response, itemCount));
@@ -99,16 +136,29 @@ function sqlDB() {
             quickDeliver(response, "text/plain", text);
         }
     }
+    
+    //used to get a project corresponding to the itemcount
+    function sendProjects(response, itemCount) {
+        if (itemCount <= projectCount){
+            selectBlogQuery.each(itemCount, sendSelectedProjects.bind(null, response, itemCount));
+        } else {
+            var more = {"more": false}
+            var data = [more];
+            var text = JSON.stringify(data);
+            //console.log(text);
+            quickDeliver(response, "text/plain", text);
+        }
+    }
 
     //used to add an email to the database and send a server response
     //it also sends an automated email to the client
-    function addEmail(response, email, subject, message) {
+    function addEmail(response, email, mailList, subject, message) {
         db.serialize(insertEmail);
         function insertEmail() {
-            insertEmailQuery.run(email, genericErrorLog);
-            //db.all("SELECT * FROM Emails", show);
+            insertEmailQuery.run(email, mailList, genericErrorLog);
+            db.all("SELECT * FROM Emails", show);
             insertMessageQuery.run(subject, message, email, messageInserted.bind(null, response, email));
-            //db.all("SELECT * FROM Messages", show);
+            db.all("SELECT * FROM Messages", show);
         }
     }
 
@@ -138,6 +188,16 @@ function sqlDB() {
         //console.log(text);
         quickDeliver(response, "text/plain", text);
     }
+    
+    function sendSelectedProjects(response,itemCount, err, row) {
+        if(err) throw err;
+        var more = {"more": (itemCount < blogCount)? true: false}
+        var data = [row, more];
+        console.log(data);
+        var text = JSON.stringify(data);
+        //console.log(text);
+        quickDeliver(response, "text/plain", text);
+    }
 
     // Deliver the file that has been read in to the browser.
     function quickDeliver(response, type, content) {
@@ -148,12 +208,11 @@ function sqlDB() {
     }
 
     function show(err, rows) {
-        console.log(rows);
         if(err) throw err;
         console.log(rows);
     }
 
-    return {addEmail, deleteTable, sendBlogs};
+    return {addEmail, deleteTable, sendBlogs, sendProjects};
 }
 
 module.exports.initialiseDB = function() {
