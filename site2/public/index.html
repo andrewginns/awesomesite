@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-GB" xml:lang="en-GB">
 
+    
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -19,34 +20,46 @@
         <script src="./js/polyfills.js"></script>
         <script src="./js/test.js"></script>
         <script src="./js/nav.js"></script>
+        <script src="./js/svg.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript" src="./js/instafeed.min.js"></script>
         <script type="text/javascript" src="./js/feed.js"></script>
         <script src="./js/magnific.min.js"></script>
     </head>
 
+    
     <body>
-        <nav class="topnav" id="myTopnav">
-            <a id ="home" class="nav-elem">Home</a>
-            <a id ="blog" class="nav-elem">Blog</a>
-            <a id ="insta" class="nav-elem">Instagram</a>
-            <a id ="projects" class="nav-elem">Projects</a>
-            <a id ="about" class="nav-elem">About</a>
-            <a id ="contact" class="nav-elem">Contact</a>
-            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <nav class="topnav" id="myTopnav" >
+            <a id ="home" class="nav-elem" >Home</a>
+            <a id ="blog" class="nav-elem" onclick="responsiveNav()" >Blog</a>
+            <a id ="insta" class="nav-elem" onclick="responsiveNav()" >Instagram</a>
+            <a id ="projects" class="nav-elem" onclick="responsiveNav()" >Projects</a>
+            <a id ="about" class="nav-elem" onclick="responsiveNav()" >About</a>
+            <a id ="contact" class="nav-elem" onclick="responsiveNav()" >Contact</a>
+            <a href="javascript:void(0);" class="icon" onclick="responsiveNav()" >
                 <i class="fa fa-bars"></i>
             </a>
         </nav>
 
+        
         <section id = "hero_section" class="hero_panel">
             <div class = "hero_intro">
                 <h1>WELCOME</h1>
-                <img id ="arrow" class="svg button pulse" src='images/arrow.svg' alt="Scroll down arrow" />
+                <svg id = "arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMin slice" class="arrows">
+                    <path class="a1" d="M0 0 L30 32 L60 0"></path>
+                    <path class="a2" d="M0 20 L30 52 L60 20"></path>
+                    <path class="a3" d="M0 40 L30 72 L60 40"></path>
+                </svg>
             </div>
 
         </section>
 
+        
         <section id = "home_section" class="home_panel">
+
+            <svg class = "pulse" id = "scrollup" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMin slice">
+                <path d="M0 32 L30 0 L60 32"></path>
+            </svg>
 
             <section id="assessment_section" class="section_summary white">
                 <h2 class="center">Assesment</h2>
@@ -66,8 +79,8 @@
             </section>
 
             <section id="blog_section" class="section_summary grey">
-                <h2 class="center">Blogs</h2>
-                <p class="center indent"><a id = "more_blogs">See more</a></p>
+                <h2 class="center">Blog</h2>
+                <button class="pulse" id = "more_blogs">more</button>
             </section>
 
 
@@ -108,26 +121,29 @@
                     <p>If you wish to get in touch, fill out the form below.</p>
                     <form id = "contact_form" class="center">
                         <div class="contact-div">
-                            E-mail: <input id ="contact_e_mail" type="text" name="e-mail" value="e-mail" />
+                            E-mail: <input id="contact_e_mail" type="text" name="e-mail" onfocus="this.value=''" value="Your email" />
                         </div>
                         <div class="contact-div">
-                            Subject: <input id ="contact_subject" type="text" name="subject" value="subject" />
+                            Subject: <input id="contact_subject" type="text" name="subject" onfocus="this.value=''" value="Subject" />
                         </div>
                         <div class="contact-div">
-                            Message: <textarea id ="contact_message" rows="4" cols="50" type="text" name="message" value="message"></textarea>
+                            Message: <textarea id="contact_message" rows="4" cols="50" type="text" name="message" value="message"></textarea>
                         </div>
-                        <input type="checkbox" name="vehicle" value="Car" checked="checked"> Add me to the mailing list <br>
+                        <input id="box" type="checkbox" checked="checked"> <span class="contact-div">Add me to the mailing list</span>
                         <div>
-                            <input id = "contact_submit" type="submit" value="submit" />
+                            <button class="pulse" id="contact_submit" >submit</button>
                         </div>
                     </form>
                 </article>
-
             </section>
-
-
+            
+            
+            <div id = "slider" class = "slider"></div>
         </section>
-
     </body>
+
+    <footer>
+        <p id="footer_text">Designed and created by Nicky Griscti Soler and Andrew Ginns <br>No Boostrap!</p>
+    </footer>
 
 </html>

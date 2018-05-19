@@ -7,97 +7,17 @@ function start() {
     window.onbeforeunload = backToTop;
     window.unload = backToTop;
 
-    //    document.getElementById("arrow").addEventListener("click", jumpTo.bind(null, "assessment_section"), false);
-    //    document.getElementById("home").addEventListener("click", scrollTo.bind(null, 0,0), false);
-    //    document.getElementById("blog").addEventListener("click", jumpTo.bind(null, "blog_section"), false);
-    //    document.getElementById("projects").addEventListener("click", jumpTo.bind(null, "projects_section"), false);
-    //    document.getElementById("about").addEventListener("click", jumpTo.bind(null, "about_section"), false);
-    //    document.getElementById("contact").addEventListener("click", jumpTo.bind(null, "contact_section"), false);
-    document.getElementById("arrow").addEventListener("click", smoothScroll.bind(null, "assessment_section"), false);
-    document.getElementById("home").addEventListener("click", smoothScroll.bind(null, "hero_section"), false);
-    document.getElementById("blog").addEventListener("click", smoothScroll.bind(null, "blog_section"), false);
-    document.getElementById("projects").addEventListener("click", smoothScroll.bind(null, "projects_section"), false);
-    document.getElementById("about").addEventListener("click", smoothScroll.bind(null, "about_section"), false);
-    document.getElementById("contact").addEventListener("click", smoothScroll.bind(null, "contact_section"), false);
-    //    document.querySelector(".svg button pulse").getSVGDocument().getElementById("svgInternalID").setAttribute("fill", "red")
-
-    //    console.log("listening for clicks")
     document.getElementById("contact_submit").addEventListener("click", processForm);
+<<<<<<< HEAD
     document.getElementById("more_blogs").addEventListener("click", retrieveBlogs);
     retrieveBlogs();
+=======
+    document.getElementById("more_blogs").addEventListener("click", retrieve);
+    document.getElementById("contact_submit").addEventListener("click", reveal.bind(null, "hi"));
+    retrieve();
+>>>>>>> 30c440eaf30ddf593914f6118c5ae76d9699e4ad
 } 
 
-//function pollBar(){
-//    var found = document.querySelector(".mfp-zoom-out-cur");
-//    console.log(found);
-//    //if the picture is present disable nav bar
-//    if (found != null) {
-//        document.getElementById("nav-bar").("display", "none");
-//        console.log("hidden true");
-//        //enable nav bar
-//    } else {
-//        document.getElementById("nav-bar").setAttribute("display", "none");
-//        console.log("hidden false");
-//    }
-//    setTimeout(pollBar, 200);
-
-
-
-//}
-
-//function jumpTo(element, event) {
-//    console.log(element);
-//    console.log(event);
-//    document.getElementById(element).scrollIntoView();
-//    console.log("click");
-//}
-
-function currentYPosition() {
-    // Firefox, Chrome, Opera, Safari
-    if (self.pageYOffset) return self.pageYOffset;
-    // Internet Explorer 6 - standards mode
-    if (document.documentElement && document.documentElement.scrollTop)
-        return document.documentElement.scrollTop;
-    // Internet Explorer 6, 7 and 8
-    if (document.body.scrollTop) return document.body.scrollTop;
-    return 0;
-}
-
-
-function elmYPosition(eID) {
-    var elm = document.getElementById(eID);
-    var y = elm.offsetTop;
-    var node = elm;
-    while (node.offsetParent && node.offsetParent != document.body) {
-        node = node.offsetParent;
-        y += node.offsetTop;
-    } return y*0.95;
-}
-
-
-function smoothScroll(eID) {
-    var startY = currentYPosition();
-    var stopY = elmYPosition(eID);
-    var distance = stopY > startY ? stopY - startY : startY - stopY;
-    if (distance < 100) {
-        scrollTo(0, stopY); return;
-    }
-    var speed = Math.round(distance / 100);
-    if (speed >= 20) speed = 20;
-    var step = Math.round(distance / 25);
-    var leapY = stopY > startY ? startY + step : startY - step;
-    var timer = 0;
-    if (stopY > startY) {
-        for ( var i=startY; i<stopY; i+=step ) {
-            setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
-            leapY += step; if (leapY > stopY) leapY = stopY; timer++;
-        } return;
-    }
-    for ( var i=startY; i>stopY; i-=step ) {
-        setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
-        leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
-    }
-}
 
 function processForm(e) {
     if (e.preventDefault) e.preventDefault();
@@ -116,6 +36,7 @@ function processForm(e) {
     return false;
 }
 
+<<<<<<< HEAD
 //used to validate the form input
 //sends a message to the client if an error occurs
 //return trues if validation passes, otherwise false
@@ -146,6 +67,8 @@ function validateFormData (params) {
     }
     
 }
+=======
+>>>>>>> 30c440eaf30ddf593914f6118c5ae76d9699e4ad
 
 function redirectPost(url, data) {
     var form = document.createElement('form');
@@ -182,7 +105,12 @@ function redirectPost(url, data) {
     //form.submit();
 }
 
+<<<<<<< HEAD
 function retrieveBlogs() {
+=======
+
+function retrieve() {
+>>>>>>> 30c440eaf30ddf593914f6118c5ae76d9699e4ad
     var count = document.querySelectorAll("#blog_section > article").length;
     console.log(count);
     var XHR = new XMLHttpRequest();
@@ -199,7 +127,7 @@ function retrieveBlogs() {
         
         document.querySelector("#blog_section > h2").insertAdjacentHTML("afterend", getBlogHTML(list));
     });
-    
+
     // Define what happens in case of error
     XHR.addEventListener("error", function(event) {
         alert('Oops! Something went wrong.');
@@ -212,6 +140,7 @@ function retrieveBlogs() {
 }
 
 
+<<<<<<< HEAD
 
 function getBlogHTML(rows) {
         
@@ -237,12 +166,22 @@ function getBlogHTML(rows) {
 
 
 
+=======
+>>>>>>> 30c440eaf30ddf593914f6118c5ae76d9699e4ad
 function backToTop() {
     window.scrollTo(0,0);
 }
 
 
+//function reveal() {
+//     document.getElementById("slider").classList.toggle("open");
+//}
 
-
+function reveal(text) {
+    console.log(text);
+    document.querySelector('#slider').innerHTML = text;
+    $('#slider').fadeIn();
+    $('#slider').delay(1000).fadeOut();
+}
 
 

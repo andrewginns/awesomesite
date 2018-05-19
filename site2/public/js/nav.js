@@ -2,6 +2,7 @@
 addEventListener('load', start);
 function start() { 
     document.getElementById("arrow").addEventListener("click", smoothScroll.bind(null, "assessment_section"), false);
+    document.getElementById("scrollup").addEventListener("click", smoothScroll.bind(null, "assessment_section"), false);
     document.getElementById("home").addEventListener("click", smoothScroll.bind(null, "hero_section"), false);
     document.getElementById("blog").addEventListener("click", smoothScroll.bind(null, "blog_section"), false);
     document.getElementById("insta").addEventListener("click", smoothScroll.bind(null, "insta_section"), false);
@@ -58,7 +59,7 @@ function smoothScroll(eID) {
 }
 
 
-function myFunction() {
+function responsiveNav() {
     var x = document.getElementById("myTopnav");
     if (x.className === "topnav") {
         x.className += " responsive";
