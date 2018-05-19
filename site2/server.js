@@ -121,7 +121,7 @@ function handlePostRequest(request, response) {
     } else if (request.headers["content-type"].includes("multipart/form-data")){
         parseFormdata(request, processForm.bind(null, response));
     }
-    
+
     //console.log(request);
 }
 
@@ -131,7 +131,7 @@ function add(body, chunk) {
 
 function end(body, request, response) {
     if (verbose) console.log("Body:", body.text);
-    reply(body, request, response);
+    serviceDynamicRequest(body, request, response);
 }
 
 //used to parse, validate, process and respond to the form input
@@ -140,7 +140,7 @@ function processForm(response, err, data) {
     var params = data.fields;
     console.log('fields:', params);
     var valid = validateFormData(response, params);
-    
+
     if(valid) {
         if(verbose)console.log("Adding", params.email, params.mailList, params.subject, params.message);
         db.addEmail(response, params.email, params.mailList, params.subject, params.message);
@@ -153,14 +153,17 @@ function processForm(response, err, data) {
 function validateFormData (response, params) {
     var valid = true;
     var notValid = false;
-    if(Object.keys(params).length === 4) {
+    var paramKeys = Object.keys(params);
+    if(paramKeys.length === 4) {
         var keys = ["email", "mailList", "subject", "message"];
         var count = 0;
-
-        for (keys in params){
-            count++;
-        }
         
+        for (var key in keys){
+            if(paramKeys.indexOf(keys[key]) > -1){
+                count++;
+            }
+        }
+
         if (count != 4) {
             fail(response, NotImp, "Invalid Form");
             return notValid;
@@ -169,21 +172,21 @@ function validateFormData (response, params) {
         fail(response, NotImp, "Invalid Form");
         return notValid;
     }
-    
+
     var err = trimParams(params);
     if(err || isNaN(params.mailList)) {
         fail(response, NotImp, "Invalid Parameters");
         return notValid;
     }
-    
+
     if(!validateEmail(params.email)) {
         fail(response, BadType, "Invalid Email Address");
         return notValid;
     }
     console.log(valid)
-    
+
     return valid;
-    
+
     //Used to trim the parameters
     //return false if any of the parameters are empty
     function trimParams(params) {
@@ -197,53 +200,57 @@ function validateFormData (response, params) {
     function validateEmail(email) {
         return email.includes("@") && email.length <= 254;
     }
-    
+
 }
 
-// Send a reply to the "POST" request
-function reply(body, request, response) {
+// Send a reply to the "POST" request, for button clicks to get more blogs/projects
+function serviceDynamicRequest(body, request, response) {
     var params = qs.parse(body.text);
     console.log(params);
     var count;
-    console.log(params.itemCount);
-    var blogs = true;
-    if(Object.keys(params).length == 2) {
+    var blogs = false;
+    var paramKeys = Object.keys(params);
+    if(paramKeys.length == 2) {
         var keys = ["itemCount"];
-        var type = ["blogs", "projects"];
+        var types = ["blogs", "projects"];
         var count = 0;
-        
-        for (keys in params){
-            count++;
+
+        for (var key in keys){
+            if(paramKeys.indexOf(keys[key]) > -1){
+                count++;
+            }
         }
-        
-        for (type in params) {
-            count++;
+
+        var type;
+        for (type in types){
+            if(paramKeys.indexOf(types[type]) > -1){
+                count++;
+            }
         }
-        
+
         if (count != 2) {
             fail(response, NotImp, "Invalid Form");
             return;
         }
-        
-        if (!("blogs" in params)) {blogs = false;}
-        
+
+        if (paramKeys.indexOf("blogs") > -1) {blogs = true;}
+
         if (isNaN(params.itemCount)) {
             fail(response, NotImp, "Bad Request");
         }
-        params.itemCount = params.itemCount + 1;
+        params.itemCount = parseInt(params.itemCount) + 1;
         console.log(params.itemCount);
     }else {
         fail(response, NotImp, "Invalid Form");
         return;
     }
-    
+
     if(blogs) {
         db.sendBlogs(response, params.itemCount);
     }else {
         db.sendProjects(response, params.itemCount);
     }
 }
-
 
 // Forbid any resources which shouldn't be delivered to the browser.
 function isBanned(url) {

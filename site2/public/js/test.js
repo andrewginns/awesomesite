@@ -10,7 +10,7 @@ function start() {
     document.getElementById("more_projects").addEventListener("click", retrieveProjects);
     document.getElementById("contact_submit").addEventListener("click", processForm);
 
-    retrieveBlogs();
+    //retrieveBlogs();
     retrieveProjects();
 }
 
@@ -43,15 +43,11 @@ function validateFormData (params) {
     if(err) {
         return "Empty Fields";
     }
-<<<<<<< HEAD
     
     if (isNaN(params.mailList)) {
         return "Invalid Form";
     }
-    
-=======
 
->>>>>>> 5dd04ac1e950747f06a040711c32f9c4a28b3001
     if(!validateEmail(params.email)) {
         return "Invalid Email Address";
     }

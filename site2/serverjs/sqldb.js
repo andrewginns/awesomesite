@@ -38,18 +38,18 @@ function sqlDB() {
 
 
         deleteTable("Messages");
-        db.run("CREATE TABLE IF NOT EXISTS Messages (subject TEXT, message TEXT, emailId INTEGER, CONSTRAINT FK_EmailRel FOREIGN KEY (emailId) REFERENCES Emails(eId))");
+        db.run("CREATE TABLE IF NOT EXISTS Messages (subject TEXT NOT NULL, message TEXT NOT NULL, emailId INTEGER NOT NULL, CONSTRAINT FK_EmailRel FOREIGN KEY (emailId) REFERENCES Emails(eId))");
 
         deleteTable("Blogs");
         deleteTable("BlogsOrdered");
-        db.run("CREATE TABLE IF NOT EXISTS Blogs(title TEXT, message TEXT, date INTEGER)");
+        db.run("CREATE TABLE IF NOT EXISTS Blogs(title TEXT NOT NULL, message TEXT NOT NULL, date INTEGER NOT NULL)");
         insertBlogQuery = db.prepare("INSERT OR IGNORE INTO Blogs(title, message, date) VALUES(?,?,?)");
         selectBlogQuery = db.prepare("SELECT * FROM Blogs WHERE rowid = ?");
 
         addBlog("title", "mesage", "2");
         addBlog("title2", "mesage", "1");
         addBlog("title3", "mesage", "4");
-        db.run("CREATE TABLE IF NOT EXISTS BlogsOrdered(title TEXT, message TEXT, date INTEGER)");
+        db.run("CREATE TABLE IF NOT EXISTS BlogsOrdered(title TEXT NOT NULL, message TEXT NOT NULL, date INTEGER NOT NULL)");
         db.run("INSERT INTO BlogsOrdered(title, message, date) SELECT title,message,date FROM Blogs ORDER BY date ASC");
         db.run("DROP TABLE Blogs");
         db.run("ALTER TABLE BlogsOrdered RENAME TO Blogs");
@@ -57,21 +57,22 @@ function sqlDB() {
         getBlogCount();
         
         
-         deleteTable("Projects");
+        deleteTable("Projects");
         deleteTable("ProjectsOrdered");
-        db.run("CREATE TABLE IF NOT EXISTS Projects(title TEXT, message TEXT, date INTEGER)");
+        db.run("CREATE TABLE IF NOT EXISTS Projects(title TEXT NOT NULL, message TEXT NOT NULL, date INTEGER NOT NULL)");
         insertProjectQuery = db.prepare("INSERT OR IGNORE INTO Projects(title, message, date) VALUES(?,?,?)");
-        selectProjectQuery = db.prepare("SELECT * FROM Blogs WHERE rowid = ?");
+        selectProjectQuery = db.prepare("SELECT * FROM Projects WHERE rowid = ?");
 
         addProject("project1", "mesage", "2");
         addProject("project2", "mesage", "1");
         addProject("project 3", "mesage", "4");
         
-        db.run("CREATE TABLE IF NOT EXISTS ProjectsOrdered(title TEXT, message TEXT, date INTEGER)");
+        db.run("CREATE TABLE IF NOT EXISTS ProjectsOrdered(title TEXT NOT NULL, message TEXT NOT NULL, date INTEGER NOT NULL)");
         db.run("INSERT INTO ProjectsOrdered(title, message, date) SELECT title,message,date FROM Projects ORDER BY date ASC");
         db.run("DROP TABLE Projects");
         db.run("ALTER TABLE ProjectsOrdered RENAME TO Projects");
         db.all("SELECT * FROM Projects", show);
+        getProjectCount();
     }
 
     function setGracefulShutdown() {
@@ -82,6 +83,8 @@ function sqlDB() {
             insertMessageQuery.finalize();
             insertBlogQuery.finalize();
             selectBlogQuery.finalize();
+            insertProjectQuery.finalize();
+            selectProjectQuery.finalize();
             db.close();
             console.log("DB closed");
             process.exit(0);
@@ -139,8 +142,10 @@ function sqlDB() {
     
     //used to get a project corresponding to the itemcount
     function sendProjects(response, itemCount) {
+        console.log(itemCount, projectCount);
         if (itemCount <= projectCount){
-            selectBlogQuery.each(itemCount, sendSelectedProjects.bind(null, response, itemCount));
+            console.log(itemCount);
+            selectProjectQuery.each(itemCount, sendSelectedProjects.bind(null, response, itemCount));
         } else {
             var more = {"more": false}
             var data = [more];
@@ -191,7 +196,7 @@ function sqlDB() {
     
     function sendSelectedProjects(response,itemCount, err, row) {
         if(err) throw err;
-        var more = {"more": (itemCount < blogCount)? true: false}
+        var more = {"more": (itemCount < projectCount)? true: false}
         var data = [row, more];
         console.log(data);
         var text = JSON.stringify(data);
