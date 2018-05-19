@@ -8,6 +8,8 @@ body {
     padding: 0;
 }
 
+button:focus {outline:0;}
+
 section.home_panel {
     margin: auto;
     position: relative;
@@ -115,25 +117,6 @@ input[type="checkbox"] {
     width: 100vw;
 
 }
-
-/*
-.slider {
-height: 0;
-position: fixed;
-}
-
-.slider.open {
-overflow-y: hidden;
-height: 3em;
-line-height: 3em;
-background-color: white;
-text-align: center;
-
-transition-property: all;
-transition-duration: .5s;
-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-}
-*/
 
 footer {
     background-color: #f71862;
