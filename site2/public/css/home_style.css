@@ -15,7 +15,7 @@ section.home_panel {
 }
 
 section.section_summary {
-    color: rgb(247, 24, 98);
+    color: #f71862;
     padding-left: 2em;
     padding-right: 2em;
 }
@@ -39,6 +39,15 @@ h2 {
 article {
     font-size: 1.2em;
     line-height: 1.4em;
+}
+
+#spacer {
+    height: 0.1em;
+    background-color: #f71862;
+    margin: auto;
+    margin-top: 2em;
+    margin-bottom: 5em;
+    width: 50vw;
 }
 
 #scrollup {
@@ -90,14 +99,14 @@ input[type="checkbox"] {
     background:none;
     font-size: 1.5em;
     display: flex;
-    color: rgb(247, 24, 98);
+    color: #f71862;
 }
 
 .slider {
     position: fixed;
     display: none;
     text-align: center;
-    color: rgb(247, 24, 98);
+    color: #f71862;
     background-color: black;
     padding: 0;
     height: 3em;
@@ -127,7 +136,7 @@ transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 */
 
 footer {
-    background-color: rgb(247, 24, 98);
+    background-color: #f71862;
     color: white;
     text-align: center;
     padding: 1em;

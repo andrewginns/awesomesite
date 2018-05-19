@@ -39,12 +39,12 @@ function validateFormData (params) {
     if(err) {
         return "Empty Fields";
     }
-    
+
     if(!validateEmail(params.email)) {
         return "Invalid Email Address";
     }
     return errMessage;
-    
+
     //Used to trim the parameters
     //return false if any of the parameters are empty
     function trimParams(params) {
@@ -58,7 +58,7 @@ function validateFormData (params) {
     function validateEmail(email) {
         return email.includes("@") && email.length <= 254;
     }
-    
+
 }
 
 function redirectPost(url, data) {
@@ -111,7 +111,7 @@ function retrieveBlogs() {
             document.getElementById("more_blogs").className = "fadeout";
             document.getElementById("more_blogs").innerHTML = "no more";  
         }
-        
+
         document.querySelector("#blog_section > h2").insertAdjacentHTML("afterend", getBlogHTML(list));
     });
 
@@ -127,26 +127,27 @@ function retrieveBlogs() {
 }
 
 function getBlogHTML(rows) {
-        
-        var text = "";
-        console.log("rows: ", rows);
-        if(rows.length > 0) {
-            for (let index in rows) {
-                text += blogHtml(rows[index])+ "\n";
-            }
+
+    var text = "";
+    console.log("rows: ", rows);
+    if(rows.length > 0) {
+        for (let index in rows) {
+            text += blogHtml(rows[index])+ "\n";
         }
-        return text;
-        
-        function blogHtml(row){
-            var html = ["<article>", 
+    }
+    return text;
+
+    function blogHtml(row){
+        var html = ["<article>", 
                     "<h3>"+ row.title +"</h3>",
                     "<p>"+ row.message + "</p>",
+                    "<div id='spacer'></div>",
                     "</article>"].join("\n");
-            return html;
-            
-        }
-        
+        return html;
+
     }
+
+}
 
 function backToTop() {
     window.scrollTo(0,0);
