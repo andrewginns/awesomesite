@@ -158,6 +158,9 @@ function parseForm(response, err, data) {
     console.log(params.email, params.subject, params.message);
     if(validateEmail(params.email)) {
         db.addEmail(response, params.email, params.subject, params.message);
+    } else {
+        response.end('Invalid Email');
+        return;
     }
 
     //Used to trim the parameters
