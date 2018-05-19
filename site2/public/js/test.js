@@ -23,8 +23,8 @@ function start() {
 
     //    console.log("listening for clicks")
     document.getElementById("contact_submit").addEventListener("click", processForm);
-    document.getElementById("more_blogs").addEventListener("click", retrieve);
-    retrieve();
+    document.getElementById("more_blogs").addEventListener("click", retrieveBlogs);
+    retrieveBlogs();
 } 
 
 //function pollBar(){
@@ -102,21 +102,49 @@ function smoothScroll(eID) {
 function processForm(e) {
     if (e.preventDefault) e.preventDefault();
     document.getElementById("contact_submit")
-    var email_t = document.getElementById("contact_e_mail");
-    var subject_t = document.getElementById("contact_subject");
-    var message_t = document.getElementById("contact_message");
-
-    if(email_t.value.trim() === "" || subject_t.value.trim() ==="" || message_t.value.trim() ==="") {
-        var div = document.createElement('div');
-        div.value = "Something wrong in the form";
-        document.body.appendChild(div);
-
+    var email_t = document.getElementById("contact_e_mail").value;
+    var subject_t = document.getElementById("contact_subject").value;
+    var message_t = document.getElementById("contact_message").value;
+    var params = {email: email_t, subject: subject_t, message: message_t};
+    var errMessage = validateFormData (params);
+    if(errMessage.length === 0){
+        redirectPost("", params)
     } else {
-        var data = {email: email_t.value, subject: subject_t.value, message: message_t.value};
-        redirectPost("", data)
+        alert(errMessage);
     }
 
     return false;
+}
+
+//used to validate the form input
+//sends a message to the client if an error occurs
+//return trues if validation passes, otherwise false
+function validateFormData (params) {
+    var errMessage = "";
+    var err = trimParams(params);
+    if(err) {
+        return "Invalid Parameters - form fields must not be empty";
+    }
+    
+    if(!validateEmail(params.email)) {
+        return "Invalid Email Address";
+    }
+    return errMessage;
+    
+    //Used to trim the parameters
+    //return false if any of the parameters are empty
+    function trimParams(params) {
+        params.email = params.email.trim();
+        params.subject = params.subject.trim();
+        params.message = params.message.trim();
+        return params.email.length === 0 || params.subject.length === 0 || params.message.length === 0;
+    }
+
+    //Used to validate the email address, must contain an @ symbol and must be less than 255 characters
+    function validateEmail(email) {
+        return email.includes("@") && email.length <= 254;
+    }
+    
 }
 
 function redirectPost(url, data) {
@@ -150,17 +178,26 @@ function redirectPost(url, data) {
     XHR.open("POST", url);
     // The data sent is what the user provided in the form
     XHR.send(FD);
-    document.getElementById("projects_section").innerHTML = XHR.responseText;
 
     //form.submit();
 }
 
-function retrieve() {
+function retrieveBlogs() {
     var count = document.querySelectorAll("#blog_section > article").length;
     console.log(count);
     var XHR = new XMLHttpRequest();
     XHR.addEventListener("load", function(event) {
-        document.querySelector("#blog_section > h2").insertAdjacentHTML("afterend", event.target.responseText);
+        var list = JSON.parse(this.responseText);
+        console.log(list);
+        var more = list.splice(-1,1)[0];
+        console.log(more["more"]);
+        if(!more["more"]) {
+            document.getElementById("more_blogs").removeEventListener("click", retrieveBlogs);
+            document.getElementById("more_blogs").className = "fadeout";
+            document.getElementById("more_blogs").innerHTML = "No More.";  
+        }
+        
+        document.querySelector("#blog_section > h2").insertAdjacentHTML("afterend", getBlogHTML(list));
     });
     
     // Define what happens in case of error
@@ -175,6 +212,28 @@ function retrieve() {
 }
 
 
+
+function getBlogHTML(rows) {
+        
+        var text = "";
+        console.log("rows: ", rows);
+        if(rows.length > 0) {
+            for (let index in rows) {
+                text += blogHtml(rows[index])+ "\n";
+            }
+        }
+        return text;
+        
+        function blogHtml(row){
+            var html = ["<article>", 
+                    "<h3>"+ row.title +"</h3>",
+                    "<p>"+ row.message + "</p>",
+                    "</article>"].join("\n");
+            return html;
+            
+        }
+        
+    }
 
 
 

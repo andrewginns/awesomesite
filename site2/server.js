@@ -28,7 +28,8 @@ var fs = require("fs");
 var qs = require("querystring");
 var sqlDB =  require("./serverjs/sqldb.js");
 
-var OK = 200, BadRequest = 400, NotFound = 404, BadType = 415, Error = 500;
+var OK = 200, BadRequest = 400, NotFound = 404, BadType = 415, Error = 500, NotImp = 501;
+
 var types, banned;
 var db;
 start();
@@ -114,14 +115,15 @@ function handleGetRequest(url, request, response) {
 function handlePostRequest(request, response) {
     var body = {text: ""};
     console.log(request.headers["content-type"]);
+    
     if(request.headers["content-type"] == "application/x-www-form-urlencoded") {
         request.on('data', add.bind(null, body));
         request.on('end', end.bind(null, body, request, response));
     } else {
-        parseFormdata(request, parseForm.bind(null, response));
+        parseFormdata(request, processForm.bind(null, response));
     }
+    
     //console.log(request);
-
 }
 
 function add(body, chunk) {
@@ -133,11 +135,26 @@ function end(body, request, response) {
     reply(body, request, response);
 }
 
-function parseForm(response, err, data) {
+//used to parse, validate, process and respond to the form input
+function processForm(response, err, data) {
     if (err) return err;
     console.log('fields:', data);
-    var params = data.fields;
+    var valid = validateFormData(response, data);
+    
+    if(valid) {
+        var params = data.fields;
+        if(verbose)console.log("Adding", params.email, params.subject, params.message);
+        db.addEmail(response, params.email, params.subject, params.message);
+    }
+}
 
+//used to validate the form input
+//sends a message to the client if an error occurs
+//return trues if validation passes, otherwise false
+function validateFormData (response, data) {
+    var params = data.fields;
+    var valid = true;
+    var notValid = false;
     if(Object.keys(params).length == 3) {
         var keys = ["email", "subject", "message"];
         var count = 0;
@@ -145,39 +162,44 @@ function parseForm(response, err, data) {
         for (keys in data.fields){
             count++;
         }
+        
         if (count != 3) {
-            response.end('Bad Form');
-            return;
+            fail(response, NotImp, "Invalid Form");
+            return notValid;
         }
     } else {
-        response.end('Bad Form');
-        return;
+        fail(response, NotImp, "Invalid Form");
+        return notValid;
     }
-
-    trimParams(params);
-    console.log(params.email, params.subject, params.message);
-    if(validateEmail(params.email)) {
-        db.addEmail(response, params.email, params.subject, params.message);
-    } else {
-        response.end('Invalid Email');
-        return;
+    
+    var err = trimParams(params);
+    if(err) {
+        fail(response, NotImp, "Invalid Parameters - form fields must not be empty");
+        return notValid;
     }
-
+    
+    if(!validateEmail(params.email)) {
+        fail(response, BadType, "Invalid Email Address");
+        return notValid;
+    }
+    
+    return valid;
+    
     //Used to trim the parameters
+    //return false if any of the parameters are empty
     function trimParams(params) {
         params.email = params.email.trim();
         params.subject = params.subject.trim();
         params.message = params.message.trim();
+        return params.email.length === 0 || params.subject.length === 0 || params.message.length === 0;
     }
 
-    //Used to validate the email address
+    //Used to validate the email address, must contain an @ symbol and must be less than 255 characters
     function validateEmail(email) {
         return email.includes("@") && email.length <= 254;
     }
-
+    
 }
-
-
 
 // Send a reply to the "POST" request
 function reply(body, request, response) {
@@ -188,6 +210,7 @@ function reply(body, request, response) {
     if(Object.keys(params).length == 2) {
         var keys = ["blogs", "itemCount"];
         var count = 0;
+        
         for (keys in params){
             count++;
         }
