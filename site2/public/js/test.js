@@ -9,11 +9,16 @@ function start() {
     document.getElementById("more_blogs").addEventListener("click", retrieveBlogs);
     document.getElementById("more_projects").addEventListener("click", retrieveProjects);
     document.getElementById("contact_submit").addEventListener("click", processForm);
-
-    //retrieveBlogs();
+    document.getElementById("scrollup").addEventListener("orientationchange", calcArrowHeight)
+    retrieveBlogs();
     retrieveProjects();
+    calcArrowHeight();
 }
 
+function calcArrowHeight() {
+    console.log(document.getElementById("scrollup").style.bottom);
+    document.getElementById("scrollup").style.bottom = document.querySelector("footer").offsetHeight;
+}
 function processForm(e) {
     if (e.preventDefault) e.preventDefault();
     document.getElementById("contact_submit")

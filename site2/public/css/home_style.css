@@ -59,6 +59,7 @@ article {
     left: 93vw;
     bottom: 6vh;
     height: 4em;
+    z-index: 1043;
 }
 
 #scrollup path {
@@ -195,6 +196,16 @@ footer {
         padding-left: 15em;
         padding-right: 15em;
         line-height: 1.6em;
+    }
+
+}
+
+/*Crazy large devices (ultrawide desktops, 2000px and up)*/
+@media (min-width: 2000px) { 
+    article {
+        padding-left: 30em;
+        padding-right: 30em;
+        line-height: 2.0em;
     }
 
 }

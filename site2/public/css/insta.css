@@ -70,4 +70,12 @@
     }
 }
 
+/*Crazy large devices (ultrawide desktops, 2000px and up)*/
+@media (min-width: 2000px) { 
+    article {
+        padding-left: 30em;
+        padding-right: 30em;
+    }
+}
+
 
