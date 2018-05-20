@@ -1,7 +1,11 @@
 addEventListener('load', loadFeed);
 
+
+var instaLoader;
 function loadFeed(){
 
+    instaLoader = document.getElementById("insta_loader");
+    
     var userFeed = new Instafeed({
         get: 'user',
         userId: '1438033383',
@@ -13,25 +17,29 @@ function loadFeed(){
         target: 'instafeed',
         template: '<a href="{{image}}" title="{{caption}}" target="_blank"><img src="{{image}}" alt="{{caption}}" class="img-post"/></a>',
         after: function() {
+            deactivateLoader(instaLoader);
             //disable button if no ore results to load
             if (!this.hasNext()) {
-                button.setAttribute('disabled', 'disabled');
-                button.className = "fadeout";
-                button.innerHTML = "no more";  
+                instaBtn.setAttribute('disabled', 'disabled');
+                instaBtn.className = "fadeout";
+                instaBtn.innerHTML = "no more";  
             }
         }
     });
 
-    var button = document.getElementById("more");
+    var instaBtn = document.getElementById("more");
 
 
     userFeed.run();
     //    var i = document.getElementsByClassName('gallery');
     //    console.log(i);
 
-    button.addEventListener("click", function() {
+    instaBtn.addEventListener("click", retrieveImages);
+    
+    function retrieveImages() {
+        showLoader(instaLoader);
         userFeed.next();
-    });
+    }
 
     //on click popup gallery
     $('.gallery').magnificPopup({

@@ -1,38 +1,84 @@
 "use strict";
-addEventListener('load', start);
-function start() { 
+
+//used to run the javascript once the page is loaded
+addEventListener('load', initHome);
+
+var projectsLoader;
+var blogsLoader;
+var blogsBtn;
+var projectsBtn;
+var submitBtn;
+var submitLoader;
+
+//used to initialise variables and setup event listeners
+function initHome() { 
     console.log("scroll to top");
 
     window.onbeforeunload = backToTop;
     window.unload = backToTop;
 
-    document.getElementById("more_blogs").addEventListener("click", retrieveBlogs);
-    document.getElementById("more_projects").addEventListener("click", retrieveProjects);
-    document.getElementById("contact_submit").addEventListener("click", processForm);
-    document.getElementById("scrollup").addEventListener("orientationchange", calcArrowHeight)
+    blogsBtn = document.getElementById("more_blogs");
+    blogsBtn.addEventListener("click", retrieveBlogs);
+    blogsLoader = document.getElementById("blogs_loader");
+    blogsBtn.showLoader = showLoader.bind(null, blogsLoader);
+
+    projectsBtn = document.getElementById("more_projects");
+    projectsBtn.addEventListener("click", retrieveProjects);
+    projectsLoader = document.getElementById("projects_loader");
+    projectsBtn.showLoader = showLoader.bind(null, projectsLoader);
+
+    submitBtn = document.getElementById("contact_submit");
+    submitBtn.addEventListener("click", processForm);
+    submitLoader = document.getElementById("form_loader");
+    submitBtn.showLoader = showLoader.bind(null, submitLoader);
+
+    document.getElementById("scrollup").addEventListener("orientationchange", calcArrowHeight);
+
     retrieveBlogs();
     retrieveProjects();
     calcArrowHeight();
 }
 
+//used to scroll the page back to the top
+function backToTop() {
+    window.scrollTo(0,0);
+}
+
+//used to make the loader button element visible
+function showLoader(element) {
+    element.style.display = "block";
+}
+
+//used to deactivate the loader button element
+function deactivateLoader(element) {
+    element.style.display = "none";
+}
+
+//used to offset the scroll up arrow by the footer height
 function calcArrowHeight() {
-    console.log(document.getElementById("scrollup").style.bottom);
     document.getElementById("scrollup").style.bottom = document.querySelector("footer").offsetHeight;
 }
+
+//used to process the form
+//this includes cleaning the data, validating it, sending it off and retrieving a response
 function processForm(e) {
+    submitBtn.showLoader();
     if (e.preventDefault) e.preventDefault();
     document.getElementById("contact_submit")
+
     var email_t = document.getElementById("contact_e_mail").value;
     var subject_t = document.getElementById("contact_subject").value;
     var message_t = document.getElementById("contact_message").value;
     var mailList_t = document.querySelector('#contact_mail:checked').value? 1 : 0;
-    console.log(mailList_t);
+
     var params = {email: email_t, mailList: mailList_t, subject: subject_t, message: message_t};
     console.log(params);
     var errMessage = validateFormData(params);
     if(errMessage.length === 0){
-        redirectPost("", params)
+        redirectAndPostForm("", params)
     } else {
+        console.log("deactivate loader");
+        deactivateLoader(submitLoader);
         reveal(errMessage);
     }
 
@@ -40,15 +86,14 @@ function processForm(e) {
 }
 
 //used to validate the form input
-//sends a message to the client if an error occurs
-//return trues if validation passes, otherwise false
+//return an erorr string if there is an error in the data
 function validateFormData (params) {
     var errMessage = "";
     var err = trimParams(params);
     if(err) {
         return "Empty Fields";
     }
-    
+
     if (isNaN(params.mailList)) {
         return "Invalid Form";
     }
@@ -74,23 +119,26 @@ function validateFormData (params) {
 
 }
 
-function redirectPost(url, data) {
-    var form = document.createElement('form');
+//used to construct a copy of the form to send of the data with
+function redirectAndPostForm(url, data) {
+    var form = document.createElement("form");
     document.body.appendChild(form);
-    form.method = 'post';
+    form.method = "POST";
     form.action = url;
     for (var name in data) {
-        var input = document.createElement('input');
-        input.type = 'hidden';
+        var input = document.createElement("input");
+        input.type = "hidden";
         input.name = name;
         input.value = data[name];
         form.appendChild(input);
     }
 
+
     var XHR = new XMLHttpRequest();
 
     // Define what happens on successful data submission
     XHR.addEventListener("load", function(event) {
+        deactivateLoader(submitLoader);
         reveal(event.target.responseText);
     });
 
@@ -98,33 +146,32 @@ function redirectPost(url, data) {
     XHR.addEventListener("error", function(event) {
         alert('Oops! Something went wrong.');
     });
-    
+
     // Bind the FormData object and the form element
     var FD = new FormData(form);
     // Set up our request
     XHR.open("POST", url);
     // The data sent is what the user provided in the form
     XHR.send(FD);
-
-    //form.submit();
 }
 
+//used to retrieve blogs, by posting a AJAX request and parsing the response
+//this uses JSON, for easier futhur development
 function retrieveBlogs() {
-
+    blogsBtn.showLoader();
     var count = document.querySelectorAll("#blog_section > article").length;
-    console.log(count);
     var XHR = new XMLHttpRequest();
     XHR.addEventListener("load", function(event) {
         var list = JSON.parse(this.responseText);
-        console.log(list);
         var more = list.splice(-1,1)[0];
-        console.log(more["more"]);
         if(!more["more"]) {
-            document.getElementById("more_blogs").removeEventListener("click", retrieveBlogs);
-            document.getElementById("more_blogs").className = "fadeout";
-            document.getElementById("more_blogs").innerHTML = "no more";  
+            blogsBtn.removeEventListener("click", retrieveBlogs);
+            console.log("disabling show loader");
+            blogsBtn.removeEventListener("click", blogsBtn.showLoader);
+            blogsBtn.className = "fadeout";
+            blogsBtn.innerHTML = "no more";  
         }
-
+        deactivateLoader(blogsLoader);
         document.querySelector("#blog_section > h2").insertAdjacentHTML("afterend", getBlogHTML(list));
     });
 
@@ -137,47 +184,53 @@ function retrieveBlogs() {
     XHR.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     XHR.send("blogs=1&itemCount=" +count);
     // Define what happens on successful data submission
-}
 
-function getBlogHTML(rows) {
+    //used template JSON blogs, and inject them into the html
+    function getBlogHTML(rows) {
 
-    var text = "";
-    console.log("rows: ", rows);
-    if(rows.length > 0) {
-        for (let index in rows) {
-            text += blogHtml(rows[index])+ "\n";
+        var text = "";
+        if(rows.length > 0) {
+            for (let index in rows) {
+                text += blogHtml(rows[index])+ "\n";
+            }
         }
-    }
-    return text;
 
-    function blogHtml(row){
-        var html = ["<article>", 
-                    "<h3>"+ row.title +"</h3>",
-                    "<p>"+ row.message + "</p>",
-                    "<div id='spacer'></div>",
-                    "</article>"].join("\n");
-        return html;
+        return text;
+
+        function blogHtml(row){
+            var html = ["<article>", 
+                        "<h3>"+ row.title +"</h3>",
+                        "<p>"+ row.message + "</p>",
+                        "<div id='spacer'></div>",
+                        "</article>"].join("\n");
+            return html;
+
+        }
 
     }
 
 }
 
-function retrieveProjects() {
 
+
+
+//used to retrieve projects, by posting an AJAX request and parsing the response
+//this uses JSON, for easier futhur development
+function retrieveProjects() {
+    projectsBtn.showLoader();
     var count = document.querySelectorAll("#projects_section > article").length;
-    console.log(count);
     var XHR = new XMLHttpRequest();
     XHR.addEventListener("load", function(event) {
         var list = JSON.parse(this.responseText);
-        console.log(list);
         var more = list.splice(-1,1)[0];
-        console.log(more["more"]);
         if(!more["more"]) {
-            document.getElementById("more_projects").removeEventListener("click", retrieveProjects);
-            document.getElementById("more_projects").className = "fadeout";
-            document.getElementById("more_projects").innerHTML = "no more";  
+            projectsBtn.removeEventListener("click", retrieveProjects);
+            console.log("disabling show loader");
+            projectsBtn.removeEventListener("click", projectsBtn.showLoader);
+            projectsBtn.className = "fadeout";
+            projectsBtn.innerHTML = "no more";  
         }
-
+        deactivateLoader(projectsLoader);
         document.querySelector("#projects_section > h2").insertAdjacentHTML("afterend", getProjectHTML(list));
     });
 
@@ -190,40 +243,39 @@ function retrieveProjects() {
     XHR.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     XHR.send("projects=1&itemCount=" +count);
     // Define what happens on successful data submission
-}
 
-function getProjectHTML(rows) {
+    function getProjectHTML(rows) {
 
-    var text = "";
-    console.log("rows: ", rows);
-    if(rows.length > 0) {
-        for (let index in rows) {
-            text += projectHtml(rows[index])+ "\n";
+        var text = "";
+        if(rows.length > 0) {
+            for (let index in rows) {
+                text += projectHtml(rows[index])+ "\n";
+            }
         }
-    }
-    return text;
+        return text;
 
-    function projectHtml(row){
-        var html = ["<article>", 
-                    "<h3>"+ row.title +"</h3>",
-                    "<p>"+ row.message + "</p>",
-                    "<div id='spacer'></div>",
-                    "</article>"].join("\n");
-        return html;
+        function projectHtml(row){
+            var html = ["<article>", 
+                        "<h3>"+ row.title +"</h3>",
+                        "<p>"+ row.message + "</p>",
+                        "<div id='spacer'></div>",
+                        "</article>"].join("\n");
+            return html;
+
+        }
 
     }
 
 }
 
-function backToTop() {
-    window.scrollTo(0,0);
-}
-
+//used to reveal the message slider
 function reveal(text) {
     console.log(text);
     document.querySelector('#slider').innerHTML = text;
     $('#slider').fadeIn();
     $('#slider').delay(1000).fadeOut();
 }
+
+
 
 
