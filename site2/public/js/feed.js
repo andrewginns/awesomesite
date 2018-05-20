@@ -30,6 +30,8 @@ function loadFeed(){
             }
         }
     });
+    
+    showLoader(instaLoader);
     userFeed.run();
 
     //used to show the loader, and get the next batch of images
