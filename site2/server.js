@@ -149,7 +149,7 @@ function processForm(response, err, data) {
 
 //used to validate the form input
 //sends a message to the client if an error occurs
-//return trues if validation passes, otherwise false
+//returns true if validation passes, otherwise false
 function validateFormData (response, params) {
     var valid = true;
     var notValid = false;
@@ -176,6 +176,16 @@ function validateFormData (response, params) {
     var err = trimParams(params);
     if(err || isNaN(params.mailList)) {
         fail(response, NotImp, "Invalid Parameters");
+        return notValid;
+    }
+    
+    if (params.subject.length > 100) {
+        fail(response, NotImp, "Subject Too Long");
+        return notValid;
+    }
+    
+    if (params.message.length > 1000) {
+        fail(response, NotImp, "Message Too Long");
         return notValid;
     }
 
@@ -277,7 +287,6 @@ function htmlContentNegotiation(request, extension, type) {
     if("html" === extension) {
         var otype = "text/html";
         var header = request.headers.accept;
-        var header = null;
         if (header != null) {
             var accepts = header.split(",");
             if(accepts.indexOf(type) < 0){
@@ -288,6 +297,7 @@ function htmlContentNegotiation(request, extension, type) {
             type = otype;
         }
     }
+    console.log(type);
     return type;
 }
 

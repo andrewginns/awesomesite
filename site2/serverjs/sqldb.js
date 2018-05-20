@@ -15,6 +15,7 @@ function sqlDB() {
     var insertAboutQuery;
     var selectAboutQuery;
     var OK = 200, Error = 500;
+    var printTables = false;
 
     function initialiseSQL() {
         db = new sqlite.Database("data.db");
@@ -46,7 +47,7 @@ function sqlDB() {
         db.run("INSERT INTO BlogsOrdered(title, message, date) SELECT title,message,date FROM Blogs ORDER BY date DESC");
         db.run("DROP TABLE Blogs");
         db.run("ALTER TABLE BlogsOrdered RENAME TO Blogs");
-        db.all("SELECT * FROM Blogs", show);
+        if(printTables) db.all("SELECT * FROM Blogs", show);
         getBlogCount();
 
         db.run("CREATE TABLE IF NOT EXISTS Projects(title TEXT NOT NULL, message TEXT NOT NULL, date INTEGER NOT NULL)");
@@ -58,7 +59,7 @@ function sqlDB() {
         db.run("INSERT INTO ProjectsOrdered(title, message, date) SELECT title,message,date FROM Projects ORDER BY date DESC");
         db.run("DROP TABLE Projects");
         db.run("ALTER TABLE ProjectsOrdered RENAME TO Projects");
-        db.all("SELECT * FROM Projects", show);
+        if(printTables)db.all("SELECT * FROM Projects", show);
         getProjectCount();
 
         db.run("CREATE TABLE IF NOT EXISTS About(about TEXT NOT NULL)");
@@ -70,7 +71,6 @@ function sqlDB() {
     //used to delete a table
     function deleteTable(table){
         db.run("DROP TABLE IF EXISTS " + table);
-        console.log(table + " deleted");
     }
     
     //Used to delete All tables for db reinintialisation
@@ -137,7 +137,7 @@ function sqlDB() {
         function countCallBack(err, row) {
             if (err) throw err;
             blogCount = row['COUNT(*)'];
-            console.log(row);
+            console.log("Blog Count", row);
         }
     }
 
@@ -154,24 +154,19 @@ function sqlDB() {
 
     //used to insert a blog into the Blog table
     function addBlog(title, message, date) {
-        console.log("Adding Blog");
-        console.log("Adding Blog");
         date = date.getTime();
-        console.log(date);
         insertBlogQuery.run(title, message, date, genericErrorLog);
     }
 
     //used to insert a blog into the Project table
     function addProject(title, message, date) {
-        console.log("Adding Project");
         insertProjectQuery.run(title, message, date, genericErrorLog);
     }
 
     //used to add an about entry into the About table
     function addAbout(about) {
-        console.log("Adding About");
         insertAboutQuery.run(about, genericErrorLog);
-        db.all("SELECT * FROM About", show);
+        if(printTables) db.all("SELECT * FROM About", show);
 
     }
 

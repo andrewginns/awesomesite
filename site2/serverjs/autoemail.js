@@ -1,7 +1,9 @@
 "use strict"
 const nodemailer = require("nodemailer");
 
+//used to initialised auto response data and send message confirmation emails
 function autoEmailer() {
+    
     // create reusable transporter object using the default SMTP transporter
     var transporterDetails = {
         host: 'smtp.gmail.com',
@@ -14,6 +16,7 @@ function autoEmailer() {
     }
     const transporter = nodemailer.createTransport(transporterDetails);
 
+    //Used to send an email, the message sent depends on whether the transaction in the db is successful
     function sendEmail(added, email) {
 
         var message = added? "The message has been received successfully, we will get back to you if necessary.":"Something went wrong when saving your message";
@@ -42,6 +45,7 @@ function autoEmailer() {
     return {sendEmail}
 }
 
+//used to allow loading via require
 module.exports.initAutoEmailer = function() {
     return autoEmailer();
 }
