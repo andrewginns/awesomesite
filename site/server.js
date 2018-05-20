@@ -13,29 +13,45 @@
 // Choose a port, e.g. change the port to the default 80, if there are no
 // privilege issues and port number 80 isn't already in use. Choose verbose to
 // list banned files (with upper case letters) on startup.
-
+"use strict"
 var port = 8080;
 var verbose = true;
 
 // Load the library modules, and define the global constants.
 // See http://en.wikipedia.org/wiki/List_of_HTTP_status_codes.
 // Start the server:
-
 var http = require("http");
+var https = require("https");
+var parseFormdata = require('parse-formdata')
+
 var fs = require("fs");
-var OK = 200, NotFound = 404, BadType = 415, Error = 500;
+var qs = require("querystring");
+var sqlDB =  require("./serverjs/sqldb.js");
+
+var OK = 200, BadRequest = 400, NotFound = 404, BadType = 415, Error = 500, NotImp = 501;
+
 var types, banned;
+var db;
 start();
 
 // Start the http service. Accept only requests from localhost, for security.
+
 function start() {
-    if (! checkSite()) return;
+    if (!checkSite()) return;
     types = defineTypes();
     banned = [];
     banUpperCase("./public/", "");
-    var service = http.createServer(handle);
-    service.listen(port, "localhost");
-    var address = "http://localhost";
+
+    db = sqlDB.initialiseDB();
+
+    //used to add an SSL certificate to the website
+    var privateKey =  fs.readFileSync('./ssl/key.pem');
+    var certificate = fs.readFileSync('./ssl/cert.pem');
+    var credentials = {key: privateKey, cert: certificate};
+
+    var service = https.createServer(credentials, handle);
+    service.listen(port, "localhost");//this makes the server listen on localhost, good practice for development/security
+    var address = "https://localhost";
     if (port != 80) address = address + ":" + port;
     console.log("Server running at", address);
 }
@@ -46,20 +62,201 @@ function checkSite() {
     var ok = fs.existsSync(path);
     if (ok) path = "./public/index.html";
     if (ok) ok = fs.existsSync(path);
-    if (! ok) console.log("Can't find", path);
+    if (!ok) console.log("Can't find", path);
     return ok;
+}
+
+//Used to log the most important request information
+function logRequestInfo(request){
+    console.log("Method:", request.method);
+    console.log("URL:", request.url);
+    console.log("Headers:", request.headers);
+}
+
+//Used to validate urls. returns true if url is invalid, otherwise false
+function invalidURL(url){
+    var ascii = /^[ -~]+$/;
+    return !ascii.test(url) ||
+        !url.startsWith("/") || 
+        url.includes("..") ||
+        url.includes("/.") ||
+        url.includes("//");
 }
 
 // Serve a request by delivering a file.
 function handle(request, response) {
-    var url = request.url.toLowerCase();
+    //if (verbose) logRequestInfo(request);
+    //to make system directories style standard
+    var url = request.url.toLowerCase().replace(/\\/g, "/");
+    //for debugging
+    if(verbose) console.log(""+url);
     if (url.endsWith("/")) url = url + "index.html";
+    if (invalidURL(url)) return fail(response, BadRequest, "Permission denied");   
     if (isBanned(url)) return fail(response, NotFound, "URL has been banned");
-    var type = findType(url);
+
+    if(verbose) console.log(request.method);
+    if(request.method.toString().toLowerCase() === "post") {
+        handlePostRequest(request, response);
+    } else if (request.method.toString().toLowerCase() === "get"){
+        handleGetRequest(url, request, response);
+    } 
+}
+
+// Deals with a "GET" request
+function handleGetRequest(url, request, response) {
+    var type = findType(request, url);
     if (type == null) return fail(response, BadType, "File type unsupported");
     var file = "./public" + url;
     fs.readFile(file, ready);
-    function ready(err, content) { deliver(response, type, err, content); }
+    function ready(err, content) { deliver(response, type, err, content); } 
+}
+
+// Deals with a "POST" request.
+function handlePostRequest(request, response) {
+    var body = {text: ""};
+    if(request.headers["content-type"] == "application/x-www-form-urlencoded") {
+        request.on('data', add.bind(null, body));
+        request.on('end', end.bind(null, body, request, response));
+    } else if (request.headers["content-type"].includes("multipart/form-data")){
+        parseFormdata(request, processForm.bind(null, response));
+    }
+
+}
+
+function add(body, chunk) {
+    body.text = body.text + chunk.toString();
+}
+
+function end(body, request, response) {
+    //if (verbose) console.log("Body:", body.text);
+    serviceDynamicRequest(body, request, response);
+}
+
+//used to parse, validate, process and respond to the form input
+function processForm(response, err, data) {
+    if (err) {return err;}
+    var params = data.fields;
+    var valid = validateFormData(response, params);
+
+    if(valid) {
+        //if(verbose)console.log("Adding", params.email, params.mailList, params.subject, params.message);
+        db.addEmail(response, params.email, params.mailList, params.subject, params.message);
+    }
+}
+
+//used to validate the form input
+//sends a message to the client if an error occurs
+//returns true if validation passes, otherwise false
+function validateFormData (response, params) {
+    var valid = true;
+    var notValid = false;
+    var paramKeys = Object.keys(params);
+    if(paramKeys.length === 4) {
+        var keys = ["email", "mailList", "subject", "message"];
+        var count = 0;
+        
+        for (var key in keys){
+            if(paramKeys.indexOf(keys[key]) > -1){
+                count++;
+            }
+        }
+
+        if (count != 4) {
+            fail(response, NotImp, "Invalid Form");
+            return notValid;
+        }
+    } else {
+        fail(response, NotImp, "Invalid Form");
+        return notValid;
+    }
+
+    var err = trimParams(params);
+    if(err || isNaN(params.mailList)) {
+        fail(response, NotImp, "Invalid Parameters");
+        return notValid;
+    }
+    
+    if (params.subject.length > 100) {
+        fail(response, NotImp, "Subject Too Long");
+        return notValid;
+    }
+    
+    if (params.message.length > 1000) {
+        fail(response, NotImp, "Message Too Long");
+        return notValid;
+    }
+
+    if(!validateEmail(params.email)) {
+        fail(response, BadType, "Invalid Email Address");
+        return notValid;
+    }
+
+    return valid;
+
+    //Used to trim the parameters
+    //return false if any of the parameters are empty
+    function trimParams(params) {
+        params.email = params.email.trim();
+        params.subject = params.subject.trim();
+        params.message = params.message.trim();
+        return params.email.length === 0 || params.subject.length === 0 || params.message.length === 0;
+    }
+
+    //Used to validate the email address, must contain an @ symbol and must be less than 255 characters
+    function validateEmail(email) {
+        return email.includes("@") && email.length <= 254;
+    }
+
+}
+
+// Send a reply to the "POST" request, for button clicks to get more blogs/projects
+function serviceDynamicRequest(body, request, response) {
+    var params = qs.parse(body.text);
+    var count;
+    var blogs = false;
+    var paramKeys = Object.keys(params);
+    if(paramKeys.length == 1 && paramKeys[0] === "about"){
+        db.sendAbout(response);
+        return;
+    } else if(paramKeys.length == 2) {
+        var keys = ["itemCount"];
+        var types = ["blogs", "projects"];
+        var count = 0;
+
+        for (var key in keys){
+            if(paramKeys.indexOf(keys[key]) > -1){
+                count++;
+            }
+        }
+
+        var type;
+        for (type in types){
+            if(paramKeys.indexOf(types[type]) > -1){
+                count++;
+            }
+        }
+
+        if (count != 2) {
+            fail(response, NotImp, "Invalid Form");
+            return;
+        }
+
+        if (paramKeys.indexOf("blogs") > -1) {blogs = true;}
+
+        if (isNaN(params.itemCount)) {
+            fail(response, NotImp, "Bad Request");
+        }
+        params.itemCount = parseInt(params.itemCount) + 1;
+    }else {
+        fail(response, NotImp, "Invalid Form");
+        return;
+    }
+
+    if(blogs) {
+        db.sendBlogs(response, params.itemCount);
+    }else {
+        db.sendProjects(response, params.itemCount);
+    }
 }
 
 // Forbid any resources which shouldn't be delivered to the browser.
@@ -72,10 +269,28 @@ function isBanned(url) {
 }
 
 // Find the content type to respond with, or undefined.
-function findType(url) {
+function findType(request, url) {
     var dot = url.lastIndexOf(".");
     var extension = url.substring(dot + 1);
-    return types[extension];
+    return htmlContentNegotiation(request, extension, types[extension]);
+}
+
+//This function is used to send the html file as standard html if xhtml is not supported
+function htmlContentNegotiation(request, extension, type) {
+    if("html" === extension) {
+        var otype = "text/html";
+        var header = request.headers.accept;
+        if (header != null) {
+            var accepts = header.split(",");
+            if(accepts.indexOf(type) < 0){
+                type = otype;
+                if (verbose) console.log("negotiated html content");
+            } 
+        }else {
+            type = otype;
+        }
+    }
+    return type;
 }
 
 // Deliver the file that has been read in to the browser.
@@ -120,7 +335,7 @@ function banUpperCase(root, folder) {
 
 // The most common standard file extensions are supported, and html is
 // delivered as "application/xhtml+xml".  Some common non-standard file
-// extensions are explicitly excluded.  This table is defined using a function
+//some extensions are explicitly excluded.  This table is defined using a function
 // rather than just a global variable, because otherwise the table would have
 // to appear before calling start().  NOTE: add entries as needed or, for a more
 // complete list, install the mime module and adapt the list it provides.
@@ -130,25 +345,10 @@ function defineTypes() {
         css  : "text/css",
         js   : "application/javascript",
         png  : "image/png",
-        gif  : "image/gif",    // for images copied unchanged
-        jpeg : "image/jpeg",   // for images copied unchanged
-        jpg  : "image/jpeg",   // for images copied unchanged
         svg  : "image/svg+xml",
         json : "application/json",
-        pdf  : "application/pdf",
         txt  : "text/plain",
-        ttf  : "application/x-font-ttf",
-        woff : "application/font-woff",
-        aac  : "audio/aac",
-        mp3  : "audio/mpeg",
-        mp4  : "video/mp4",
-        webm : "video/webm",
         ico  : "image/x-icon", // just for favicon.ico
-        xhtml: undefined,      // non-standard, use .html
-        htm  : undefined,      // non-standard, use .html
-        rar  : undefined,      // non-standard, platform dependent, use .zip
-        doc  : undefined,      // non-standard, platform dependent, use .pdf
-        docx : undefined,      // non-standard, platform dependent, use .pdf
     }
     return types;
 }
