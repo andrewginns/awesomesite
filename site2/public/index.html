@@ -6,22 +6,22 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
         <title>Personal Website</title>
-        <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
-        <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
-        <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
-        <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-        <link rel="manifest" href="/manifest.json">
+        <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="/favicon/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+        <link rel="manifest" href="/favicon/manifest.json">
         <meta name="msapplication-TileColor" content="#ffffff">
-        <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+        <meta name="msapplication-TileImage" content="/favicon/ms-icon-144x144.png">
         <meta name="theme-color" content="#ffffff">
         <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet" />
@@ -46,12 +46,12 @@
     <body>
         <nav class="topnav" id="myTopnav" >
             <a id ="home" class="nav-elem" >Home</a>
-            <a id ="blog" class="nav-elem" onclick="responsiveNav()" >Blog</a>
-            <a id ="insta" class="nav-elem" onclick="responsiveNav()" >Instagram</a>
-            <a id ="projects" class="nav-elem" onclick="responsiveNav()" >Projects</a>
-            <a id ="about" class="nav-elem" onclick="responsiveNav()" >About</a>
-            <a id ="contact" class="nav-elem" onclick="responsiveNav()" >Contact</a>
-            <a href="javascript:void(0);" class="icon" onclick="responsiveNav()" >
+            <a id ="blog" class="nav-elem" >Blog</a>
+            <a id ="insta" class="nav-elem" >Instagram</a>
+            <a id ="projects" class="nav-elem" >Projects</a>
+            <a id ="about" class="nav-elem" >About</a>
+            <a id ="contact" class="nav-elem" >Contact</a>
+            <a id ="menu" href="javascript:void(0);" class="icon" >
                 <i class="fa fa-bars"></i>
             </a>
         </nav>
@@ -71,11 +71,11 @@
                     <image src="/images/arrow.png" xlink:href=""/>
                 </svg>
             </div>
-
         </section>
 
 
         <section id = "home_section" class="home_panel">
+
 
             <svg class = "pulse" id = "scrollup" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMin slice" alt="scroll up">
                 <desc>
@@ -86,6 +86,7 @@
                 Please upgrade to a modern browser for SVG support.
                 <path d="M0 32 L30 0 L60 32"></path>
             </svg>
+
 
             <section id="assessment_section" class="section_summary white">
                 <h2 class="center">Assesment</h2>
@@ -103,6 +104,7 @@
                     </ul>     
                 </article>
             </section>
+
 
             <section id="blog_section" class="section_summary grey">
                 <h2 class="center">Blog</h2>
@@ -124,12 +126,12 @@
                 <button class="pulse" id = "more_projects">more</button>
             </section>
 
+
             <section id="about_section" class="section_summary white">
                 <h2 class="center">About</h2>
                 <article>
                     <p>Mauris in dui et ex rhoncus lacinia. Nulla facilisi. Quisque quis elit in felis rhoncus facilisis aliquet sed mauris. Curabitur id commodo purus, in efficitur urna. Etiam porta, purus a eleifend aliquet, mi nisl porta nibh, et suscipit metus nisl vel ipsum. Nulla ut urna ultricies, aliquet mi eget, mattis odio. Vestibulum ut nisl nunc. Nunc ac enim ut erat rhoncus dignissim. Fusce vitae viverra quam. Sed at purus ornare, auctor nisl feugiat, consectetur enim. Sed consequat, orci lobortis commodo molestie, orci augue vulputate nunc, eu volutpat libero elit eget eros. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In hac habitasse platea dictumst. In fringilla erat at felis blandit, eu mattis massa fringilla.</p>
                 </article>
-
             </section>
 
 
