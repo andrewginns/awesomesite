@@ -210,7 +210,11 @@ function serviceDynamicRequest(body, request, response) {
     var count;
     var blogs = false;
     var paramKeys = Object.keys(params);
-    if(paramKeys.length == 2) {
+    console.log(paramKeys);
+    if(paramKeys.length == 1 && paramKeys[0] === "about"){
+        db.sendAbout(response);
+        return;
+    } else if(paramKeys.length == 2) {
         var keys = ["itemCount"];
         var types = ["blogs", "projects"];
         var count = 0;

@@ -9,6 +9,7 @@ var blogsBtn;
 var projectsBtn;
 var submitBtn;
 var submitLoader;
+var aboutLoader;
 
 //used to initialise variables and setup event listeners
 function initContent() { 
@@ -22,7 +23,6 @@ function initContent() {
     blogsBtn.addEventListener("click", smoothScroll.bind(null, "blog_section"), false);
     blogsLoader = document.getElementById("blogs_loader");
     blogsBtn.showLoader = showLoader.bind(null, blogsLoader);
-    
 
     projectsBtn = document.getElementById("more_projects");
     projectsBtn.addEventListener("click", retrieveProjects);
@@ -34,9 +34,12 @@ function initContent() {
     submitBtn.addEventListener("click", processForm);
     submitLoader = document.getElementById("form_loader");
     submitBtn.showLoader = showLoader.bind(null, submitLoader);
-
+    
+    aboutLoader = document.getElementById("about_loader");
+    console.log(aboutLoader);
     retrieveBlogs();
     retrieveProjects();
+    retrieveAbout();
 }
 
 //used to scroll the page back to the top
@@ -72,7 +75,6 @@ function processForm(e) {
     if(errMessage.length === 0){
         redirectAndPostForm("", params)
     } else {
-        console.log("deactivate loader");
         deactivateLoader(submitLoader);
         reveal(errMessage);
     }
@@ -128,19 +130,8 @@ function redirectAndPostForm(url, data) {
         form.appendChild(input);
     }
 
-
     var XHR = new XMLHttpRequest();
-
-    // Define what happens on successful data submission
-    XHR.addEventListener("load", function(event) {
-        deactivateLoader(submitLoader);
-        reveal(event.target.responseText);
-    });
-
-    // Define what happens in case of error
-    XHR.addEventListener("error", function(event) {
-        alert('Oops! Something went wrong.');
-    });
+    receiveData(XHR, true, formReply);
 
     // Bind the FormData object and the form element
     var FD = new FormData(form);
@@ -148,6 +139,12 @@ function redirectAndPostForm(url, data) {
     XHR.open("POST", url);
     // The data sent is what the user provided in the form
     XHR.send(FD);
+
+    //used to report the response from the server and deactivate the loader
+    function formReply(reply) {
+        deactivateLoader(submitLoader);
+        reveal(reply.responseText);
+    }
 }
 
 //used to retrieve blogs, by posting a AJAX request and parsing the response
@@ -156,8 +153,18 @@ function retrieveBlogs() {
     blogsBtn.showLoader();
     var count = document.querySelectorAll("#blog_section > article").length;
     var XHR = new XMLHttpRequest();
-    XHR.addEventListener("load", function(event) {
-        var list = JSON.parse(this.responseText);
+    receiveData(XHR, false, blogsResponse);
+
+    XHR.open("POST", "", true);
+    //XHR.setRequestHeader("Content-type", "text/html");
+    XHR.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    XHR.send("blogs=1&itemCount=" +count);
+    // Define what happens on successful data submission
+
+    //this processes the the response containing the blogs data
+    //it disables the loader and injects html if html for the blog/s is generated.
+    function blogsResponse(reply) {
+        var list = JSON.parse(reply.responseText);
         var more = list.splice(-1,1)[0];
         if(!more["more"]) {
             blogsBtn.removeEventListener("click", retrieveBlogs);
@@ -168,19 +175,9 @@ function retrieveBlogs() {
         }
         deactivateLoader(blogsLoader);
         document.querySelector("#blog_section > h2").insertAdjacentHTML("afterend", getBlogHTML(list));
-    });
+    }
 
-    // Define what happens in case of error
-    XHR.addEventListener("error", function(event) {
-        alert('Oops! Something went wrong.');
-    });
-    XHR.open("POST", "", true);
-    //XHR.setRequestHeader("Content-type", "text/html");
-    XHR.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    XHR.send("blogs=1&itemCount=" +count);
-    // Define what happens on successful data submission
-
-    //used template JSON blogs, and inject them into the html
+    //used to template JSON blogs
     function getBlogHTML(rows) {
 
         var text = "";
@@ -192,6 +189,7 @@ function retrieveBlogs() {
 
         return text;
 
+        //used to template an html blog
         function blogHtml(row){
             var html = ["<article>", 
                         "<h3>"+ row.title +"</h3>",
@@ -199,9 +197,36 @@ function retrieveBlogs() {
                         "<div id='spacer'></div>",
                         "</article>"].join("\n");
             return html;
-
         }
+    }
 
+}
+
+function retrieveAbout() {
+    showLoader(aboutLoader);
+    var count = document.querySelectorAll("#about_section > article").length;
+    var XHR = new XMLHttpRequest();
+    receiveData(XHR, true, aboutResponse);
+
+    XHR.open("POST", "", true);
+    //XHR.setRequestHeader("Content-type", "text/html");
+    XHR.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    XHR.send("about=1");
+    // Define what happens on successful data submission
+
+    //this processes the the response containing the blogs data
+    //it disables the loader and injects html if html for the blog/s is generated.
+    function aboutResponse(reply) {
+        deactivateLoader(aboutLoader);
+        document.querySelector("#about_section > h2").insertAdjacentHTML("afterend", getAboutHtml(reply.responseText));
+        
+        //used to create and return the about html
+        function getAboutHtml(text) {
+            var html = ["<article>", 
+                        "<p>"+ text + "</p>",
+                        "</article>"].join("\n");
+            return html;
+        }
     }
 
 }
@@ -215,31 +240,30 @@ function retrieveProjects() {
     projectsBtn.showLoader();
     var count = document.querySelectorAll("#projects_section > article").length;
     var XHR = new XMLHttpRequest();
-    XHR.addEventListener("load", function(event) {
-        var list = JSON.parse(this.responseText);
-        var more = list.splice(-1,1)[0];
-        if(!more["more"]) {
-            projectsBtn.removeEventListener("click", retrieveProjects);
-            console.log("disabling show loader");
-            projectsBtn.removeEventListener("click", projectsBtn.showLoader);
-            projectsBtn.className = "fadeout";
-            projectsBtn.innerHTML = "no more";  
-        }
-        deactivateLoader(projectsLoader);
-        document.querySelector("#projects_section > h2").insertAdjacentHTML("afterend", getProjectHTML(list));
-    });
+    receiveData(XHR, false, projectsResponse);
 
-    // Define what happens in case of error
-    XHR.addEventListener("error", function(event) {
-        alert('Oops! Something went wrong.');
-    });
     XHR.open("POST", "", true);
     //XHR.setRequestHeader("Content-type", "text/html");
     XHR.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     XHR.send("projects=1&itemCount=" +count);
     // Define what happens on successful data submission
 
-    //used template JSON projects, and inject them into the html
+    //this processes the the response containing the projects data
+    //it disables the loader and injects html if html for the project/s is generated.
+    function projectsResponse(reply) {
+        var list = JSON.parse(reply.responseText);
+        var more = list.splice(-1,1)[0];
+        if(!more["more"]) {
+            projectsBtn.removeEventListener("click", retrieveProjects);
+            projectsBtn.className = "fadeout";
+            projectsBtn.innerHTML = "no more";  
+        }
+        deactivateLoader(projectsLoader);
+        document.querySelector("#projects_section > h2").insertAdjacentHTML("afterend", getProjectHTML(list));
+    }
+
+
+    //used to template JSON projects
     function getProjectHTML(rows) {
 
         var text = "";
@@ -249,7 +273,8 @@ function retrieveProjects() {
             }
         }
         return text;
-        
+
+        //used to template an html blog
         function projectHtml(row){
             var html = ["<article>", 
                         "<h3>"+ row.title +"</h3>",
@@ -259,7 +284,26 @@ function retrieveProjects() {
             return html;
 
         }
+    }
 
+}
+
+//sets the AJAX response callback
+//funcRef is the reference to the function to be actually used on successful responses or if neatReport is set
+//neatReport will display the error message within the website
+function receiveData(q, neatReport, funcRef) {
+    q.onreadystatechange = receive;
+
+    //wrapper function to receive the response
+    function receive (err, data) {
+        // Define what happens in case of error
+        if (this.readyState != XMLHttpRequest.DONE)return;
+        if (neatReport || this.status == 200) {
+            funcRef(this);
+        } else {
+            // Define what happens in case of error
+            alert('Oops! Something went wrong.');
+        }
     }
 
 }
