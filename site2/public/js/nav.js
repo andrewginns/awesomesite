@@ -89,6 +89,7 @@ function pageYLocation() {
 }
 
 //Smooth scrolling based on distance to target from current location
+//Adapted from http://www.itnewb.com/tutorial/Creating-the-Smooth-Scroll-Effect-with-JavaScript
 function smoothScroll(target) {
     var startY = pageYLocation();
     var stopY = targetPosition(target);
