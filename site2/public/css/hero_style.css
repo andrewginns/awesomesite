@@ -4,6 +4,7 @@
 
 section.hero_panel {
     position: relative;
+    background-color: lightpink;
     background-image: url("/images/edited.png");
     background-attachment: fixed;
     background-position: center;
