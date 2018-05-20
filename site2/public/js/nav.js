@@ -2,8 +2,8 @@
 addEventListener('load', start);
 
 var arrow;
-var home;
 var scrollup;
+var home;
 var blog;
 var insta;
 var projects;
@@ -15,13 +15,12 @@ function start() {
     arrow = document.getElementById("arrow");
     arrow.addEventListener("click", smoothScroll.bind(null, "assessment_section"), false);
 
+    scrollup = document.getElementById("scrollup");
+    scrollup.addEventListener("click", smoothScroll.bind(null, "assessment_section"), false);
+    
     home = document.getElementById("home");
     home.addEventListener("click", smoothScroll.bind(null, "hero_section"), false);
     home.addEventListener("click", removeDropdown, false);
-
-    scrollup = document.getElementById("scrollup");
-    scrollup.addEventListener("click", smoothScroll.bind(null, "assessment_section"), false);
-    scrollup.addEventListener("click", dropdownNav, false);
 
     blog = document.getElementById("blog");
     blog.addEventListener("click", smoothScroll.bind(null, "blog_section"), false);
