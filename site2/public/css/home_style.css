@@ -44,6 +44,7 @@ h2 {
 article {
     font-size: 1.2em;
     line-height: 1.4em;
+    text-align: justify;
 }
 
 #spacer {
@@ -59,9 +60,9 @@ article {
     display: none;
     position: fixed;
     padding-top:2em;
-    left: 93vw;
-    bottom: 6vh;
-    height: 4em;
+    bottom: 4em;
+    left: 87vw;
+    height: 2em;
     z-index: 1043;
 }
 
@@ -187,8 +188,8 @@ footer {
 
 /* for backwrds compatibility */
 @-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
 }
 
 /*for back wards compatibility*/
@@ -216,24 +217,27 @@ footer {
         padding-right: 5em;
         line-height: 1.5em;
     }
-}
 
-/*Extra large devices (large desktops, 1200px and up)*/
-@media (min-width: 1200px) { 
-    article {
-        padding-left: 15em;
-        padding-right: 15em;
-        line-height: 1.6em;
+    #scrollup {
+        left: 95vw;
     }
 
-}
+    /*Extra large devices (large desktops, 1200px and up)*/
+    @media (min-width: 1200px) { 
+        article {
+            padding-left: 15em;
+            padding-right: 15em;
+            line-height: 1.6em;
+        }
 
-/*Crazy large devices (ultrawide desktops, 2000px and up)*/
-@media (min-width: 2000px) { 
-    article {
-        padding-left: 30em;
-        padding-right: 30em;
-        line-height: 2.0em;
     }
 
-}
+    /*Crazy large devices (ultrawide desktops, 2000px and up)*/
+    @media (min-width: 2000px) { 
+        article {
+            padding-left: 30em;
+            padding-right: 30em;
+            line-height: 2.0em;
+        }
+
+    }
