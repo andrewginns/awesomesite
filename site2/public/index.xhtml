@@ -24,22 +24,26 @@
         <meta name="msapplication-TileImage" content="/favicon/ms-icon-144x144.png"/>
         <meta name="theme-color" content="#ffffff"/>
         <!--        Style-->
+        <!--        Remote-->
         <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+        <!--        Local-->
         <link href="./css/nav_style.css" rel="stylesheet" type="text/css" />
         <link href="./css/hero_style.css" rel="stylesheet" type="text/css" />
         <link href="./css/home_style.css" rel="stylesheet" type="text/css" />
         <link href="./css/insta.css" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="./css/magnific.css"/>
         <!--        Javascript-->
+        <!--        Remote-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!--        Local-->
         <script src="./js/html5shiv.js"></script>
+        <script src="./js/instafeed.min.js"></script>
+        <script src="./js/magnific.min.js"></script>
         <script src="./js/content.js"></script>
         <script src="./js/nav.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="./js/instafeed.min.js"></script>
         <script src="./js/feed.js"></script>
-        <script src="./js/magnific.min.js"></script>
     </head>
 
     <!--Navigation bar-->
@@ -125,10 +129,8 @@
 
 
             <section id="about_section" class="section_summary white">
-                <article>
-                    <h2 class="center">About</h2>
-                    <p>Mauris in dui et ex rhoncus lacinia. Nulla facilisi. Quisque quis elit in felis rhoncus facilisis aliquet sed mauris. Curabitur id commodo purus, in efficitur urna. Etiam porta, purus a eleifend aliquet, mi nisl porta nibh, et suscipit metus nisl vel ipsum. Nulla ut urna ultricies, aliquet mi eget, mattis odio. Vestibulum ut nisl nunc. Nunc ac enim ut erat rhoncus dignissim. Fusce vitae viverra quam. Sed at purus ornare, auctor nisl feugiat, consectetur enim. Sed consequat, orci lobortis commodo molestie, orci augue vulputate nunc, eu volutpat libero elit eget eros. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In hac habitasse platea dictumst. In fringilla erat at felis blandit, eu mattis massa fringilla.</p>
-                </article>
+                <h2 class="center">About</h2>
+                <div id="about_loader" class="loader"></div>
             </section>
 
 

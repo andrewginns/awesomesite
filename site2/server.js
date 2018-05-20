@@ -343,25 +343,10 @@ function defineTypes() {
         css  : "text/css",
         js   : "application/javascript",
         png  : "image/png",
-        gif  : "image/gif",    // for images copied unchanged, not standard remove
-        jpeg : "image/jpeg",   // for images copied unchanged, not standard, remove
-        jpg  : "image/jpeg",   // for images copied unchanged, not standard remove
         svg  : "image/svg+xml",
         json : "application/json",
-        pdf  : "application/pdf",
         txt  : "text/plain",
-        ttf  : "application/x-font-ttf",
-        woff : "application/font-woff",
-        aac  : "audio/aac",
-        mp3  : "audio/mpeg",
-        mp4  : "video/mp4",
-        webm : "video/webm",
         ico  : "image/x-icon", // just for favicon.ico
-        xhtml: undefined,      // non-standard, use .html
-        htm  : undefined,      // non-standard, use .html
-        rar  : undefined,      // non-standard, platform dependent, use .zip
-        doc  : undefined,      // non-standard, platform dependent, use .pdf
-        docx : undefined,      // non-standard, platform dependent, use .pdf
     }
     return types;
 }
