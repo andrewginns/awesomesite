@@ -23,9 +23,11 @@ function sqlDB() {
         db.serialize(initialiseTablesAndQueries);
         db.serialize(insertDummyData);
         setGracefulShutdown(db);
-        db.on("error", function(error) {
+        db.on("error", report);
+        function report(error) {
             console.log("Getting an error : ", error);
-        }); 
+        }
+        console.log("DB started")
         return db;
     }
 
@@ -195,7 +197,6 @@ function sqlDB() {
     //and send it as a response as a JSON
     //if the itemCount is larger than the projectCount then the JSON is set to {"more": false}, this is error handling for devious requests
     function sendProjects(response, itemCount) {
-        console.log(itemCount, projectCount);
         if (itemCount <= projectCount){
             //console.log(itemCount);
             selectProjectQuery.each(itemCount, sendSelectedProjects.bind(null, response, itemCount));

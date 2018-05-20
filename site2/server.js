@@ -89,7 +89,7 @@ function handle(request, response) {
     //to make system directories style standard
     var url = request.url.toLowerCase().replace(/\\/g, "/");
     //for debugging
-    console.log(""+url);
+    if(verbose) console.log(""+url);
     if (url.endsWith("/")) url = url + "index.html";
     if (invalidURL(url)) return fail(response, BadRequest, "Permission denied");   
     if (isBanned(url)) return fail(response, NotFound, "URL has been banned");
@@ -114,7 +114,6 @@ function handleGetRequest(url, request, response) {
 // Deals with a "POST" request.
 function handlePostRequest(request, response) {
     var body = {text: ""};
-    if (verbose) console.log(request.headers["content-type"]);
     if(request.headers["content-type"] == "application/x-www-form-urlencoded") {
         request.on('data', add.bind(null, body));
         request.on('end', end.bind(null, body, request, response));
@@ -122,7 +121,6 @@ function handlePostRequest(request, response) {
         parseFormdata(request, processForm.bind(null, response));
     }
 
-    //console.log(request);
 }
 
 function add(body, chunk) {
@@ -130,7 +128,7 @@ function add(body, chunk) {
 }
 
 function end(body, request, response) {
-    if (verbose) console.log("Body:", body.text);
+    //if (verbose) console.log("Body:", body.text);
     serviceDynamicRequest(body, request, response);
 }
 
@@ -138,11 +136,10 @@ function end(body, request, response) {
 function processForm(response, err, data) {
     if (err) {return err;}
     var params = data.fields;
-    console.log('fields:', params);
     var valid = validateFormData(response, params);
 
     if(valid) {
-        if(verbose)console.log("Adding", params.email, params.mailList, params.subject, params.message);
+        //if(verbose)console.log("Adding", params.email, params.mailList, params.subject, params.message);
         db.addEmail(response, params.email, params.mailList, params.subject, params.message);
     }
 }
@@ -193,7 +190,6 @@ function validateFormData (response, params) {
         fail(response, BadType, "Invalid Email Address");
         return notValid;
     }
-    console.log(valid)
 
     return valid;
 
@@ -216,11 +212,9 @@ function validateFormData (response, params) {
 // Send a reply to the "POST" request, for button clicks to get more blogs/projects
 function serviceDynamicRequest(body, request, response) {
     var params = qs.parse(body.text);
-    console.log(params);
     var count;
     var blogs = false;
     var paramKeys = Object.keys(params);
-    console.log(paramKeys);
     if(paramKeys.length == 1 && paramKeys[0] === "about"){
         db.sendAbout(response);
         return;
@@ -253,7 +247,6 @@ function serviceDynamicRequest(body, request, response) {
             fail(response, NotImp, "Bad Request");
         }
         params.itemCount = parseInt(params.itemCount) + 1;
-        console.log(params.itemCount);
     }else {
         fail(response, NotImp, "Invalid Form");
         return;
@@ -297,7 +290,6 @@ function htmlContentNegotiation(request, extension, type) {
             type = otype;
         }
     }
-    console.log(type);
     return type;
 }
 

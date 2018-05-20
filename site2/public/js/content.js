@@ -13,7 +13,6 @@ var aboutLoader;
 
 //used to initialise variables and setup event listeners
 function initContent() { 
-    console.log("scroll to top");
 
     window.onbeforeunload = backToTop;
     window.unload = backToTop;
@@ -34,7 +33,6 @@ function initContent() {
     submitBtn.showLoader = showLoader.bind(null, submitLoader);
 
     aboutLoader = document.getElementById("about_loader");
-    console.log(aboutLoader);
     retrieveBlogs();
     retrieveProjects();
     retrieveAbout();
@@ -68,7 +66,6 @@ function processForm(e) {
     var mailList_t = document.querySelector('#contact_mail:checked').value? 1 : 0;
 
     var params = {email: email_t, mailList: mailList_t, subject: subject_t, message: message_t};
-    console.log(params);
     var errMessage = validateFormData(params);
     if(errMessage.length === 0){
         redirectAndPostForm("", params)
@@ -175,7 +172,6 @@ function retrieveBlogs() {
         var more = list.splice(-1,1)[0];
         if(!more["more"]) {
             blogsBtn.removeEventListener("click", retrieveBlogs);
-            console.log("disabling show loader");
             blogsBtn.removeEventListener("click", blogsBtn.showLoader);
             blogsBtn.className = "fadeout";
             blogsBtn.innerHTML = "no more";  
@@ -322,7 +318,6 @@ function receiveData(q, neatReport, funcRef) {
 
 //used to reveal the message slider
 function reveal(text) {
-    console.log(text);
     document.querySelector('#slider').innerHTML = text;
     $('#slider').fadeIn();
     $('#slider').delay(1000).fadeOut();
@@ -331,7 +326,6 @@ function reveal(text) {
 //used to get the current time in UK standard format
 function getTime(date) {
     date  = new Date(date);
-    console.log(date);
     var dd = date.getDate();
     var mm = date.getMonth()+1; //January is 0!
     var yyyy = date.getFullYear();
