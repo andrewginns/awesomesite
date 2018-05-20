@@ -20,13 +20,11 @@ function initContent() {
 
     blogsBtn = document.getElementById("more_blogs");
     blogsBtn.addEventListener("click", retrieveBlogs);
-    blogsBtn.addEventListener("click", smoothScroll.bind(null, "blog_section"), false);
     blogsLoader = document.getElementById("blogs_loader");
     blogsBtn.showLoader = showLoader.bind(null, blogsLoader);
 
     projectsBtn = document.getElementById("more_projects");
     projectsBtn.addEventListener("click", retrieveProjects);
-    projectsBtn.addEventListener("click", smoothScroll.bind(null, "projects_section"), false);
     projectsLoader = document.getElementById("projects_loader");
     projectsBtn.showLoader = showLoader.bind(null, projectsLoader);
 
@@ -174,12 +172,7 @@ function retrieveBlogs() {
             blogsBtn.innerHTML = "no more";  
         }
         deactivateLoader(blogsLoader);
-        var lastElement = document.querySelector("#blog_section > article:last-child");
-        console.log(lastElement);
-        if (lastElement == null) {
-            lastElement = document.querySelector("#blog_section > h2");
-        }
-        lastElement.insertAdjacentHTML("afterend", getBlogHTML(list));
+        blogsLoader.insertAdjacentHTML("beforebegin", getBlogHTML(list));
     }
 
     //used to template JSON blogs
@@ -199,7 +192,7 @@ function retrieveBlogs() {
             var actualDate = getTime(row.date);
             var html = ["<article>", 
                         "<h2>"+ row.title +"</h2>",
-                        "<h3>"+ actualDate +"</h3>",
+                        "<h2 id ='date'>"+ actualDate +"</h2>",
                         "<p>"+ row.message + "</p>",
                         "<div id='spacer'></div>",
                         "</article>"].join("\n");
@@ -225,7 +218,7 @@ function retrieveAbout() {
     //it disables the loader and injects html if html for the blog/s is generated.
     function aboutResponse(reply) {
         deactivateLoader(aboutLoader);
-        document.querySelector("#about_section > h2").insertAdjacentHTML("afterend", getAboutHtml(reply.responseText));
+        aboutLoader.insertAdjacentHTML("beforebegin", getAboutHtml(reply.responseText));
 
         //used to create and return the about html
         function getAboutHtml(text) {
@@ -266,11 +259,7 @@ function retrieveProjects() {
             projectsBtn.innerHTML = "no more";  
         }
         deactivateLoader(projectsLoader);
-        var lastElement = document.querySelector("#projects_section > article:last-child");
-        if (lastElement == null) {
-            lastElement = document.querySelector("#projects_section > h2");
-        }
-        lastElement.insertAdjacentHTML("afterend", getProjectHTML(list));
+        projectsLoader.insertAdjacentHTML("beforebegin", getProjectHTML(list));
     }
 
 
@@ -291,7 +280,7 @@ function retrieveProjects() {
 
             var html = ["<article>", 
                         "<h2>"+ row.title +"</h2>",
-                        "<h3>"+ actualDate +"</h3>",
+                        "<h2 id ='date'>"+ actualDate +"</h2>",
                         "<p>"+ row.message + "</p>",
                         "<div id='spacer'></div>",
                         "</article>"].join("\n");
