@@ -19,9 +19,9 @@ function sqlDB() {
 
     function initialiseSQL() {
         db = new sqlite.Database("data.db");
-        db.serialize(deleteAllTables);
+        //db.serialize(deleteAllTables);
         db.serialize(initialiseTablesAndQueries);
-        db.serialize(insertDummyData);
+        //db.serialize(insertDummyData);
         setGracefulShutdown(db);
         db.on("error", report);
         function report(error) {
