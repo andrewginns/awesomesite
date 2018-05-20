@@ -43,7 +43,7 @@ function sqlDB() {
 
         
         db.run("CREATE TABLE IF NOT EXISTS BlogsOrdered(title TEXT NOT NULL, message TEXT NOT NULL, date INTEGER NOT NULL)");
-        db.run("INSERT INTO BlogsOrdered(title, message, date) SELECT title,message,date FROM Blogs ORDER BY date ASC");
+        db.run("INSERT INTO BlogsOrdered(title, message, date) SELECT title,message,date FROM Blogs ORDER BY date DESC");
         db.run("DROP TABLE Blogs");
         db.run("ALTER TABLE BlogsOrdered RENAME TO Blogs");
         db.all("SELECT * FROM Blogs", show);
@@ -55,7 +55,7 @@ function sqlDB() {
 
 
         db.run("CREATE TABLE IF NOT EXISTS ProjectsOrdered(title TEXT NOT NULL, message TEXT NOT NULL, date INTEGER NOT NULL)");
-        db.run("INSERT INTO ProjectsOrdered(title, message, date) SELECT title,message,date FROM Projects ORDER BY date ASC");
+        db.run("INSERT INTO ProjectsOrdered(title, message, date) SELECT title,message,date FROM Projects ORDER BY date DESC");
         db.run("DROP TABLE Projects");
         db.run("ALTER TABLE ProjectsOrdered RENAME TO Projects");
         db.all("SELECT * FROM Projects", show);
