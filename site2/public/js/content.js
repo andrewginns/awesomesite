@@ -191,10 +191,10 @@ function retrieveBlogs() {
         function blogHtml(row){
             var actualDate = getTime(row.date);
             var html = ["<article>", 
-                        "<h2>"+ row.title +"</h2>",
-                        "<h2 id ='date'>"+ actualDate +"</h2>",
+                        "<h2 class ='title'>"+ row.title +"</h2>",
+                        "<h2 class ='date'>"+ actualDate +"</h2>",
                         "<p>"+ row.message + "</p>",
-                        "<div id='spacer'></div>",
+                        "<div class='spacer'></div>",
                         "</article>"].join("\n");
             return html;
         }
@@ -279,10 +279,10 @@ function retrieveProjects() {
             var actualDate = getTime(row.date);
 
             var html = ["<article>", 
-                        "<h2>"+ row.title +"</h2>",
-                        "<h2 id ='date'>"+ actualDate +"</h2>",
+                        "<h2 class ='title'>"+ row.title +"</h2>",
+                        "<h2 class ='date'>"+ actualDate +"</h2>",
                         "<p>"+ row.message + "</p>",
-                        "<div id='spacer'></div>",
+                        "<div class='spacer'></div>",
                         "</article>"].join("\n");
             return html;
 

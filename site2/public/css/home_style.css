@@ -41,19 +41,36 @@ h2 {
     text-align: left;
 }
 
+.title {
+    font-size: 1.4em;
+    padding: 0;
+    margin: auto;
+    text-align: left;
+    color: black;
+}
+
+.date {
+    font-size: 0.8em;
+    padding: 0;
+    margin: auto;
+    text-align: left;
+    color: black;
+    font-style: italic;
+}
+
 article {
     font-size: 1.2em;
     line-height: 1.4em;
     text-align: justify;
 }
 
-#spacer {
+.spacer {
     height: 0.1em;
     background-color: black;
     margin: auto;
     margin-top: 2em;
     margin-bottom: 5em;
-    width: 50vw;
+    width: 33vw;
 }
 
 #scrollup {
