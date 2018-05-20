@@ -19,11 +19,14 @@ function initContent() {
 
     blogsBtn = document.getElementById("more_blogs");
     blogsBtn.addEventListener("click", retrieveBlogs);
+    blogsBtn.addEventListener("click", smoothScroll.bind(null, "blog_section"), false);
     blogsLoader = document.getElementById("blogs_loader");
     blogsBtn.showLoader = showLoader.bind(null, blogsLoader);
+    
 
     projectsBtn = document.getElementById("more_projects");
     projectsBtn.addEventListener("click", retrieveProjects);
+    projectsBtn.addEventListener("click", smoothScroll.bind(null, "projects_section"), false);
     projectsLoader = document.getElementById("projects_loader");
     projectsBtn.showLoader = showLoader.bind(null, projectsLoader);
 

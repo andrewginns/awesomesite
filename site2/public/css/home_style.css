@@ -1,3 +1,6 @@
+/*Styling for the main body of the page 'home_panel'*/
+
+/*Setting the global font style with fallback*/
 * {
     font-family: 'Roboto Condensed', 'PT Mono', monospace, Arial, Helvetica, FreeSans, sans-serif;
 }
@@ -45,7 +48,7 @@ article {
 
 #spacer {
     height: 0.1em;
-    background-color: #f71862;
+    background-color: black;
     margin: auto;
     margin-top: 2em;
     margin-bottom: 5em;
@@ -103,6 +106,7 @@ input[type="checkbox"] {
     display: flex;
 }
 
+/*Response from server when submitting contact form. Initially displayed as hidden*/
 .slider {
     position: fixed;
     display: none;
@@ -128,6 +132,7 @@ footer {
     margin: 0;
 }
 
+/*Pulsing animation for the buttons*/
 .pulse {
     animation: pulse 2s infinite;
     animation-direction: alternate;
@@ -138,6 +143,7 @@ footer {
     stroke:#f71862;
 }
 
+/*Hovering over the pulsing buttons (text and svg) changes colour to black*/
 .pulse:hover {
     stroke: #000000;
     color: #000000;
@@ -146,42 +152,26 @@ footer {
 
 /*for back wards compatibility*/
 @-webkit-keyframes pulse {
-    0% {
-        -webkit-transform: scale(1);
-    }
-    50% {
-        -webkit-transform: scale(1.2);
-    }
-    100% {
-        -webkit-transform: scale(1);
-    }
+    0% {-webkit-transform: scale(1);}
+    50% {-webkit-transform: scale(1.2);}
+    100% {-webkit-transform: scale(1);}
 }
 
 /*for back wards compatibility*/
 @-moz-keyframes pulse {
-    0% {
-        -moz-transform:scale(1);
-    }
-    50% {
-        -moz-transform: scale(1.2);
-    }
-    100% {
-        -moz-transform:scale(1);
-    }
+    0% {-moz-transform:scale(1);}
+    50% {-moz-transform: scale(1.2);}
+    100% {-moz-transform:scale(1);}
 }
 
 @keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.2);
-    }
-    100% {
-        transform: scale(1);
-    }
+    0% {transform: scale(1);}
+    50% {transform: scale(1.2);}
+    100% {transform: scale(1);}
 }
 
+
+/*Loading icon that is displayed whilst content is loading (blogs, instagram, projects*/
 .loader {
     border: 0.3em solid black; /* Light grey */
     border-top: 0.3em solid #f71862; /* Blue */
@@ -193,10 +183,7 @@ footer {
     animation: spin 2s linear infinite;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+/*Spinning animation for the loading icon*/
 
 /* for backwrds compatibility */
 @-webkit-keyframes spin {
@@ -210,24 +197,18 @@ footer {
     100% { -moz-transform: rotate(360deg); }
 }
 
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 .fadeout {
     visibility: visible;
     opacity: 0.4;
     transition: visibility 0s 1s, opacity 0.8s linear;
 }
 
-/*Extra small devices (portrait phones, less than 576px) No media query for `xs` since this is the default*/
-
-/*Small devices (landscape phones, 568px and up)*/
-@media (min-width: 568px) { 
-
-}
-
-/*Medium devices (tablets, 768px and up)*/
-@media (min-width: 768px) { 
-
-}
-
+/*Media queries for different device sizes*/
 /*Large devices (desktops, 992px and up)*/
 @media (min-width: 992px)  { 
     article {
