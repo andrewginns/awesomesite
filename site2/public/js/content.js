@@ -96,8 +96,17 @@ function validateFormData (params) {
     if(!validateEmail(params.email)) {
         return "Invalid Email Address";
     }
+    
+    if (params.subject.length > 100) {
+        return "Subject Too Long";
+    }
+    
+    if (params.message.length > 1000) {
+        return "Message Too Long";
+    }
+    
     return errMessage;
-
+    
     //Used to trim the parameters
     //return false if any of the parameters are empty
     function trimParams(params) {
@@ -202,6 +211,8 @@ function retrieveBlogs() {
 
 }
 
+//used to retrieve the about section, by posting a AJAX request and parsing the response
+//this is retrieved as plain text
 function retrieveAbout() {
     showLoader(aboutLoader);
     var count = document.querySelectorAll("#about_section > article").length;
@@ -228,10 +239,8 @@ function retrieveAbout() {
             return html;
         }
     }
-
+    
 }
-
-
 
 
 //used to retrieve projects, by posting an AJAX request and parsing the response
