@@ -1,7 +1,7 @@
 "use strict";
 
 //used to run the javascript once the page is loaded
-addEventListener('load', initHome);
+addEventListener('load', initContent);
 
 var projectsLoader;
 var blogsLoader;
@@ -11,7 +11,7 @@ var submitBtn;
 var submitLoader;
 
 //used to initialise variables and setup event listeners
-function initHome() { 
+function initContent() { 
     console.log("scroll to top");
 
     window.onbeforeunload = backToTop;
@@ -32,11 +32,8 @@ function initHome() {
     submitLoader = document.getElementById("form_loader");
     submitBtn.showLoader = showLoader.bind(null, submitLoader);
 
-    document.getElementById("scrollup").addEventListener("orientationchange", calcArrowHeight);
-
     retrieveBlogs();
     retrieveProjects();
-    calcArrowHeight();
 }
 
 //used to scroll the page back to the top
@@ -52,11 +49,6 @@ function showLoader(element) {
 //used to deactivate the loader button element
 function deactivateLoader(element) {
     element.style.display = "none";
-}
-
-//used to offset the scroll up arrow by the footer height
-function calcArrowHeight() {
-    document.getElementById("scrollup").style.bottom = document.querySelector("footer").offsetHeight;
 }
 
 //used to process the form
@@ -244,6 +236,7 @@ function retrieveProjects() {
     XHR.send("projects=1&itemCount=" +count);
     // Define what happens on successful data submission
 
+    //used template JSON projects, and inject them into the html
     function getProjectHTML(rows) {
 
         var text = "";
@@ -253,7 +246,7 @@ function retrieveProjects() {
             }
         }
         return text;
-
+        
         function projectHtml(row){
             var html = ["<article>", 
                         "<h3>"+ row.title +"</h3>",

@@ -1,5 +1,6 @@
 "use strict";
-addEventListener('load', start);
+//used to run the javascript once the page is loaded
+addEventListener('load', initNav);
 
 var arrow;
 var scrollup;
@@ -11,13 +12,14 @@ var about;
 var contact;
 var menu;
 
-function start() {
+//used to initialise variables and setup event listeners
+function initNav() {
     arrow = document.getElementById("arrow");
     arrow.addEventListener("click", smoothScroll.bind(null, "assessment_section"), false);
 
     scrollup = document.getElementById("scrollup");
     scrollup.addEventListener("click", smoothScroll.bind(null, "assessment_section"), false);
-    
+
     home = document.getElementById("home");
     home.addEventListener("click", smoothScroll.bind(null, "hero_section"), false);
     home.addEventListener("click", removeDropdown, false);
@@ -44,6 +46,30 @@ function start() {
 
     menu = document.getElementById("menu");
     menu.addEventListener("click", dropdownNav, false);
+
+    document.getElementById("scrollup").addEventListener("orientationchange", calcArrowHeight);
+    calcArrowHeight();
+    initScrollSVG();
+}
+
+//used to initialise the scrollup svg
+function initScrollSVG() { 
+    toggleScrollUp();
+    window.addEventListener("scroll", toggleScrollUp);
+
+    //used to toggle the scrollUp arrow
+    function toggleScrollUp() {
+        if ($("#insta_section").offset().top < $(window).scrollTop() + $(window).height()) {
+            $('#scrollup').fadeIn();
+        } else {
+            $('#scrollup').fadeOut();
+        }
+    }
+}
+
+//used to offset the scroll up arrow by the footer height
+function calcArrowHeight() {
+    document.getElementById("scrollup").style.bottom = document.querySelector("footer").offsetHeight;
 }
 
 //On click renames the class to append or remove 'dropdown'
@@ -56,6 +82,7 @@ function dropdownNav() {
     }
 }
 
+//On click renames the class to remove 'dropdown'
 function removeDropdown() {
     var x = document.getElementById("myTopnav");
     x.className = "topnav";
