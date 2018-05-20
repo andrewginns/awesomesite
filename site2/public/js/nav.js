@@ -69,7 +69,7 @@ function initScrollSVG() {
 
 //used to offset the scroll up arrow by the footer height
 function calcArrowHeight() {
-    document.getElementById("scrollup").style.bottom = document.querySelector("footer").offsetHeight;
+    document.getElementById("scrollup").style.bottom = document.querySelector(".footer").offsetHeight;
 }
 
 //On click renames the class to append or remove 'dropdown'

@@ -64,6 +64,7 @@ article {
     left: 87vw;
     height: 2em;
     z-index: 1043;
+    overflow: visible;
 }
 
 #scrollup path {
@@ -122,7 +123,7 @@ input[type="checkbox"] {
 
 }
 
-footer {
+.footer {
     background-color: #f71862;
     color: white;
     text-align: center;
@@ -174,8 +175,8 @@ footer {
 
 /*Loading icon that is displayed whilst content is loading (blogs, instagram, projects*/
 .loader {
-    border: 0.3em solid black; /* Light grey */
-    border-top: 0.3em solid #f71862; /* Blue */
+    border: 0.3em solid black;
+    border-top: 0.3em solid #f71862;
     border-radius: 50%;
     width: 2em;
     height: 2em;
@@ -183,6 +184,7 @@ footer {
     margin: auto;
     animation: spin 2s linear infinite;
 }
+
 
 /*Spinning animation for the loading icon*/
 
