@@ -34,7 +34,7 @@ function initContent() {
     submitBtn.addEventListener("click", processForm);
     submitLoader = document.getElementById("form_loader");
     submitBtn.showLoader = showLoader.bind(null, submitLoader);
-    
+
     aboutLoader = document.getElementById("about_loader");
     console.log(aboutLoader);
     retrieveBlogs();
@@ -174,7 +174,12 @@ function retrieveBlogs() {
             blogsBtn.innerHTML = "no more";  
         }
         deactivateLoader(blogsLoader);
-        document.querySelector("#blog_section > h2").insertAdjacentHTML("afterend", getBlogHTML(list));
+        var lastElement = document.querySelector("#blog_section > article:last-child");
+        console.log(lastElement);
+        if (lastElement == null) {
+            lastElement = document.querySelector("#blog_section > h2");
+        }
+        lastElement.insertAdjacentHTML("afterend", getBlogHTML(list));
     }
 
     //used to template JSON blogs
@@ -191,8 +196,10 @@ function retrieveBlogs() {
 
         //used to template an html blog
         function blogHtml(row){
+            var actualDate = getTime(row.date);
             var html = ["<article>", 
-                        "<h3>"+ row.title +"</h3>",
+                        "<h2>"+ row.title +"</h2>",
+                        "<h3>"+ actualDate +"</h3>",
                         "<p>"+ row.message + "</p>",
                         "<div id='spacer'></div>",
                         "</article>"].join("\n");
@@ -219,10 +226,10 @@ function retrieveAbout() {
     function aboutResponse(reply) {
         deactivateLoader(aboutLoader);
         document.querySelector("#about_section > h2").insertAdjacentHTML("afterend", getAboutHtml(reply.responseText));
-        
+
         //used to create and return the about html
         function getAboutHtml(text) {
-            var html = ["<article>", 
+            var html = ["<article>",
                         "<p>"+ text + "</p>",
                         "</article>"].join("\n");
             return html;
@@ -259,7 +266,11 @@ function retrieveProjects() {
             projectsBtn.innerHTML = "no more";  
         }
         deactivateLoader(projectsLoader);
-        document.querySelector("#projects_section > h2").insertAdjacentHTML("afterend", getProjectHTML(list));
+        var lastElement = document.querySelector("#projects_section > article:last-child");
+        if (lastElement == null) {
+            lastElement = document.querySelector("#projects_section > h2");
+        }
+        lastElement.insertAdjacentHTML("afterend", getProjectHTML(list));
     }
 
 
@@ -276,8 +287,11 @@ function retrieveProjects() {
 
         //used to template an html blog
         function projectHtml(row){
+            var actualDate = getTime(row.date);
+
             var html = ["<article>", 
-                        "<h3>"+ row.title +"</h3>",
+                        "<h2>"+ row.title +"</h2>",
+                        "<h3>"+ actualDate +"</h3>",
                         "<p>"+ row.message + "</p>",
                         "<div id='spacer'></div>",
                         "</article>"].join("\n");
@@ -316,6 +330,22 @@ function reveal(text) {
     $('#slider').delay(1000).fadeOut();
 }
 
+//used to get the current time in UK standard format
+function getTime(date) {
+    date  = new Date(date);
+    console.log(date);
+    var dd = date.getDate();
+    var mm = date.getMonth()+1; //January is 0!
+    var yyyy = date.getFullYear();
+    if(dd<10){
+        dd='0'+dd;
+    } 
+    if(mm<10){
+        mm='0'+mm;
+    } 
+    var today = dd+'/'+mm+'/'+yyyy;
+    return today;
+}
 
 
 
