@@ -123,7 +123,6 @@ function sqlDB() {
             selectProjectQuery.finalize();
             selectAboutQuery.finalize();
             insertAboutQuery.finalize();
-            deleteTableQuery.finalize();
             db.close();
             console.log("DB closed");
             process.exit(0);
