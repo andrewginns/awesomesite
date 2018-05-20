@@ -69,8 +69,12 @@ article {
     background-color: black;
     margin: auto;
     margin-top: 2em;
-    margin-bottom: 5em;
+    margin-bottom: 2em;
     width: 33vw;
+}
+
+#about_section {
+    padding-bottom: 2em;
 }
 
 #scrollup {
