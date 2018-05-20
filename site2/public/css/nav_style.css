@@ -1,3 +1,5 @@
+/*Styling for the top navigation of the page 'topnav*/
+
 .topnav {
     overflow: hidden;
     background-color: white;
@@ -25,6 +27,9 @@
 .topnav .icon {
     display: none;
 }
+
+
+/*Media queries for different device sizes*/
 
 @media screen and (max-width: 600px) {
     .topnav a:not(:first-child) {display: none;}

@@ -1,6 +1,4 @@
-* {
-    box-sizing: border-box; 
-}
+/*Styling for the top of the page 'hero_panel'*/
 
 section.hero_panel {
     position: relative;
@@ -46,14 +44,10 @@ section.hero_panel h1 {
     stroke: #f71862;
 }
 
-@keyframes arrow
-{
-    0% {opacity:0}
-    40% {opacity:1}
-    80% {opacity:0}
-    100% {opacity:0}
-}
 
+/*Fading animation for the three arrows in the hero section*/
+
+/*for back wards compatibility*/
 @-webkit-keyframes arrow 
 {
     0% {opacity:0}
@@ -62,6 +56,24 @@ section.hero_panel h1 {
     100% {opacity:0}
 }
 
+/*for back wards compatibility*/
+@-moz-keyframes arrow 
+{
+    0% {-moz-opacity:0;}
+    40% {-moz-opacity:1;}
+    80% {-moz-opacity:0;}
+    100% {-moz-opacity:0;}
+}
+
+@keyframes arrow
+{
+    0% {opacity:0}
+    40% {opacity:1}
+    80% {opacity:0}
+    100% {opacity:0}
+}
+
+/*Creating a cascade effect by delaying the animation*/
 .arrows path.a1 {
     animation-delay:-1s;
     -webkit-animation-delay:-1s;
@@ -75,26 +87,4 @@ section.hero_panel h1 {
 .arrows path.a3 {	
     animation-delay:0s;
     -webkit-animation-delay:0s;
-}
-
-/*Extra small devices (portrait phones, less than 576px) No media query for `xs` since this is the default*/
-
-/*Small devices (landscape phones, 568px and up)*/
-@media (min-width: 568px) { 
-
-}
-
-/*Medium devices (tablets, 768px and up)*/
-@media (min-width: 768px) { 
-
-}
-
-/*Large devices (desktops, 992px and up)*/
-@media (min-width: 992px)  { 
-
-}
-
-/*Extra large devices (large desktops, 1200px and up)*/
-@media (min-width: 1200px) { 
-
 }

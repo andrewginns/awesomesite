@@ -1,4 +1,4 @@
-/*We want a tab for the personal account and a tab for the professional account*/
+/*Styling for the Instagram section 'insta_section'*/
 
 #instafeed {
     width: auto%;
@@ -7,6 +7,10 @@
     flex-wrap: wrap;
     align-items: center;
     position: relative;
+}
+
+#instafeed a {
+    width: 50%;
 }
 
 .img-post{
@@ -32,21 +36,12 @@
     display: flex;
 }
 
-#instafeed a {
-    width: 50%;
-}
-
-/*Extra small devices (portrait phones, less than 576px) No media query for `xs` since this is the default*/
-
+/*Media queries for different device sizes*/
 /*Small devices (landscape phones, 576px and up)*/
 @media (min-width: 568px) { 
     #instafeed a {
         width: 33%;
     }
-}
-
-/*Medium devices (tablets, 768px and up)*/
-@media (min-width: 768px) { 
 }
 
 /*Large devices (desktops, 992px and up)*/
@@ -59,7 +54,6 @@
         width: 25%;
     }
 }
-
 
 /*Extra large devices (large desktops, 1200px and up)*/
 @media (min-width: 1200px) { 
