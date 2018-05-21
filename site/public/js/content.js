@@ -198,7 +198,7 @@ function retrieveBlogs() {
             var html = ["<article>", 
                         "<h2 class ='title'>"+ row.title +"</h2>",
                         "<h2 class ='date'>"+ actualDate +"</h2>",
-                        "<p>"+ row.message + "</p>",
+                        "<p>"+ row.article + "</p>",
                         "<div class='spacer'></div>",
                         "</article>"].join("\n");
             return html;
@@ -286,7 +286,7 @@ function retrieveProjects() {
             var html = ["<article>", 
                         "<h2 class ='title'>"+ row.title +"</h2>",
                         "<h2 class ='date'>"+ actualDate +"</h2>",
-                        "<p>"+ row.message + "</p>",
+                        "<p>"+ row.article + "</p>",
                         "<div class='spacer'></div>",
                         "</article>"].join("\n");
             return html;

@@ -215,6 +215,7 @@ function serviceDynamicRequest(body, request, response) {
     var count;
     var blogs = false;
     var paramKeys = Object.keys(params);
+    console.log(params);
     if(paramKeys.length == 1 && paramKeys[0] === "about"){
         db.sendAbout(response);
         return;
