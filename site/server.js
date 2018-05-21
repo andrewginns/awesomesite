@@ -349,6 +349,7 @@ function defineTypes() {
         json : "application/json",
         txt  : "text/plain",
         ico  : "image/x-icon", // just for favicon.ico
+        xml  : "text/xml",
     }
     return types;
 }
